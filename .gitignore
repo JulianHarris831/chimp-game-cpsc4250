@@ -50,3 +50,11 @@ linux/flutter/generated_plugin_registrant.cc
 linux/flutter/generated_plugins.cmake
 linux/flutter/generated_plugin_registrant.h
 macos/Flutter/GeneratedPluginRegistrant.swift
+ios/Flutter/Debug.xcconfig
+*.xcconfig
+ios/Podfile
+ios/Podfile.lock
+ios/Flutter/Debug.xcconfig
+ios/Flutter/Release.xcconfig
+ios/Runner.xcodeproj/project.pbxproj
+ios/Runner.xcworkspace/contents.xcworkspacedata
