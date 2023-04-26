@@ -46,3 +46,7 @@ app.*.map.json
 /android/app/release
 macos/Flutter/ephemeral/flutter_export_environment.sh
 macos/Flutter/ephemeral/Flutter-Generated.xcconfig
+linux/flutter/generated_plugin_registrant.cc
+linux/flutter/generated_plugins.cmake
+linux/flutter/generated_plugin_registrant.h
+macos/Flutter/GeneratedPluginRegistrant.swift
