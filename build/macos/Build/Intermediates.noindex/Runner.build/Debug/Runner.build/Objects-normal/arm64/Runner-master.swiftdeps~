@@ -1,8 +1,0 @@
-version: "Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)"
-options: "472db9b4c081b6c941541e745a4312c11a0fb240a20814c3c697b802d4d02e9f"
-build_start_time: [1682459817, 175585031]
-build_end_time: [1682459817, 199589014]
-inputs:
-  "/Users/julianharris/dev/CPSC_4250/flutterProjects/chimp-game-cpsc4250/macos/Flutter/GeneratedPluginRegistrant.swift": !private [1682459807, 656207084]
-  "/Users/julianharris/dev/CPSC_4250/flutterProjects/chimp-game-cpsc4250/macos/Runner/AppDelegate.swift": !private [1679506235, 0]
-  "/Users/julianharris/dev/CPSC_4250/flutterProjects/chimp-game-cpsc4250/macos/Runner/MainFlutterWindow.swift": !private [1679506235, 0]

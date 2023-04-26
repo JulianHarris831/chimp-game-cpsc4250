@@ -1,0 +1,4 @@
+#Tue Apr 25 23:07:58 PDT 2023
+base.0=C\:\\Users\\HansenRahadi\\Documents\\GitHub\\chimp-game-cpsc4250\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
