@@ -13,7 +13,7 @@ import 'package:chimp_game/firebase/login_register_page.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const LoginOrRegister());
+    await tester.pumpWidget(const LoginOrRegister(autoLogin: false));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

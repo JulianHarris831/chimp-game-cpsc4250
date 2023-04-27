@@ -3,16 +3,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'login_view.dart';
 import 'register_view.dart';
+import 'package:chimp_game/home_page.dart';
 
 class LoginOrRegister extends StatelessWidget {
-  const LoginOrRegister({Key? key}) : super(key: key);
+  const LoginOrRegister({Key? key, required this.autoLogin}) : super(key: key);
+  final bool autoLogin;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Boeing Safety App',
-      theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.tealAccent)),
+      title: 'Chimp Game',
       routes: {
         '/login/': (context) => const LoginView(),
         '/register/': (context) => const RegisterView(),
@@ -24,9 +23,11 @@ class LoginOrRegister extends StatelessWidget {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              // For auto login system using local storage
-              return const LoginView();
-
+              if (autoLogin) {
+                return const MyHomePage(pageIndex: 0);
+              } else {
+                return const LoginView();
+              }
             default:
               return const Text('Loading...');
           }

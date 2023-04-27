@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chimp_game/home_page.dart';
 import 'package:chimp_game/providers.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -16,6 +19,8 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   String? temp;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -69,6 +74,15 @@ class _LoginViewState extends State<LoginView> {
                     final userCredential = await FirebaseAuth.instance
                         .signInWithEmailAndPassword(
                             email: email, password: password);
+
+                    final FlutterSecureStorage _storage =
+                        FlutterSecureStorage();
+                    await _storage.write(key: 'email', value: email);
+                    await _storage.write(key: 'password', value: password);
+                    final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    await prefs.setInt(
+                        'last_login', DateTime.now().millisecondsSinceEpoch);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
