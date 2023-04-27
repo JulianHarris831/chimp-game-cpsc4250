@@ -1,18 +1,8 @@
+import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'profile_view.dart';
-import 'package:chimp_game/main.dart';
-
-String? getDisplayName() {
-  User? user = FirebaseAuth.instance.currentUser;
-  return user?.displayName;
-}
-
-void printError(bool registered) {
-  if (!registered) {
-    Text('please try again!');
-  }
-}
+import 'package:chimp_game/home_page.dart';
+import 'package:chimp_game/providers.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -21,21 +11,20 @@ class RegisterView extends StatefulWidget {
   State<RegisterView> createState() => _RegisterViewState();
 }
 
+//FORM WIDGET, MORE THAN 100 LINES ALLOWED
 class _RegisterViewState extends State<RegisterView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
-  late final TextEditingController _firstName;
-  late final TextEditingController _lastName;
-  String? temp = null;
-  String? name = null;
+  late final TextEditingController _nickName;
+  String? temp;
+  String? name;
   bool registered = true;
 
   @override
   void initState() {
     _email = TextEditingController();
     _password = TextEditingController();
-    _firstName = TextEditingController();
-    _lastName = TextEditingController();
+    _nickName = TextEditingController();
     super.initState();
   }
 
@@ -43,132 +32,113 @@ class _RegisterViewState extends State<RegisterView> {
   void dispose() {
     _email.dispose();
     _password.dispose();
-    _firstName.dispose();
-    _lastName.dispose();
+    _nickName.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Register'), backgroundColor: Colors.orange),
+      appBar: AppBar(
+          title: Text(
+            'Register',
+            style: heading3,
+          ),
+          backgroundColor: orange),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(medium),
           child: ListView(
             children: [
               TextField(
+                style: form1,
                 controller: _email,
                 enableSuggestions: false,
                 autocorrect: false,
                 keyboardType: TextInputType.emailAddress,
-                decoration:
-                    const InputDecoration(hintText: 'Enter your email here!'),
+                decoration: InputDecoration(
+                    hintText: 'Enter your email here!', hintStyle: hint1),
               ),
               TextField(
+                style: form1,
                 controller: _password,
                 obscureText: true,
                 enableSuggestions: false,
                 autocorrect: false,
-                decoration: const InputDecoration(
-                    hintText: 'Enter your password here!'),
+                decoration: InputDecoration(
+                    hintText: 'Enter your password here!', hintStyle: hint1),
               ),
-              Divider(
-                height: 45,
-                color: Colors.transparent,
-              ),
+              SizedBox(height: large),
               Container(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  'Profile Information: ',
-                  style: TextStyle(fontSize: 18),
-                ),
+                child: Text('Profile Information: ', style: heading2),
               ),
-              Divider(
-                height: 15,
-                color: Colors.transparent,
-              ),
+              SizedBox(height: xsmall),
               TextField(
-                controller: _firstName,
+                style: form1,
+                controller: _nickName,
+                maxLength: 12,
                 enableSuggestions: false,
                 autocorrect: false,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(hintText: 'First Name'),
+                keyboardType: TextInputType.name,
+                decoration:
+                    InputDecoration(hintText: 'Nickname', hintStyle: hint1),
               ),
-              TextField(
-                controller: _lastName,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration: const InputDecoration(hintText: 'Last Name'),
-              ),
-              Divider(
-                height: 10,
-                color: Colors.transparent,
-              ),
-              if (temp != null)
-                Text(
-                  temp!,
-                  style: TextStyle(color: Colors.red),
-                ),
-              Divider(
-                height: 20,
-                color: Colors.transparent,
-              ),
+              SizedBox(height: small),
               TextButton(
                 onPressed: () async {
-                  setState(() {
-                    temp = null;
-                  });
-                  final email = _email.text;
-                  final password = _password.text;
-
-                  try {
-                    final UserCredential = await FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
-                            email: email, password: password);
-
-                    print("registered as: " + email);
-
-                    String firstName = _firstName.text;
-                    String lastName = _lastName.text;
-                    String fullName = '$firstName $lastName';
-                    print(fullName);
-
-                    final user = FirebaseAuth.instance.currentUser;
-                    await user?.updateDisplayName(fullName);
-
-                    print(UserCredential);
-
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MyHomePage(pageIndex: 0)));
-                  } on FirebaseAuthException catch (e) {
+                  if (_nickName == null || _nickName.text.isEmpty) {
+                    displayErrorMsg(context, "Nickname cannot be empty!");
+                  } else {
                     setState(() {
-                      temp = e.code;
+                      temp = null;
                     });
-                    if (temp == 'email-already-in-use') {
-                      print('Email already in use!');
-                    } else if (temp == 'weak-password') {
-                      print('Weak password!');
-                    } else if (temp == 'invalid-email') {
-                      print('Invalid email!');
-                    } else {
-                      print('An error occurred!');
-                      print(e.code);
+                    final email = _email.text;
+                    final password = _password.text;
+
+                    try {
+                      final UserCredential = await FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                              email: email, password: password);
+                      String fullName = _nickName.text;
+
+                      final user = FirebaseAuth.instance.currentUser;
+                      await user?.updateDisplayName(fullName);
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyHomePage(pageIndex: 0)));
+                    } on FirebaseAuthException catch (e) {
+                      setState(() {
+                        temp = e.code;
+                      });
+                      if (temp == 'email-already-in-use') {
+                        displayErrorMsg(context, 'Email already in use!');
+                      } else if (temp == 'weak-password') {
+                        displayErrorMsg(context, 'Weak password!');
+                      } else if (temp == 'invalid-email') {
+                        displayErrorMsg(context, 'Invalid email!');
+                      } else {
+                        displayErrorMsg(context, e.code);
+                      }
                     }
-                    print("please try again!");
                   }
                 },
-                child: const Text('Register'),
+                child: Text('Register', style: textButton1),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/login/', (route) => false);
-                },
-                child:
-                    const Text('Already have an account? Click here to login!'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Already have an account?", style: textButton2),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pushNamedAndRemoveUntil('/login/', (route) => false);
+                    },
+                    child: Text('Click here to login!', style: textButton1),
+                  )
+                ],
               )
             ],
           ),

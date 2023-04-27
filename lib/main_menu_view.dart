@@ -1,3 +1,4 @@
+import 'package:chimp_game/styles.dart';
 import 'package:flutter/material.dart';
 
 class MainMenuPage extends StatefulWidget {
@@ -15,36 +16,25 @@ class _MainMenuPageState extends State<MainMenuPage> {
         child: Center(
           child: Column(
             children: [
-              Container(
-                color: Colors.transparent,
-                height: 200,
-              ),
-              Container(
-                child: const Text(
-                  "CHIMP GAME",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(height: 100),
+              SizedBox(height: large * 4),
+              Text("CHIMP GAME", textAlign: TextAlign.center, style: heading4),
+              SizedBox(height: large * 2),
               ElevatedButton(
-                child: const Text("PLAY",
-                    textAlign: TextAlign.center,
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 onPressed: () {
                   //navigate to gameplay page here
                 },
                 style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.all(Size(300, 75)),
+                  minimumSize:
+                      MaterialStateProperty.all(Size(large * 6, large * 2)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                   ),
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.orange),
+                  backgroundColor: MaterialStateProperty.all<Color>(orange),
                 ),
+                child:
+                    Text("PLAY", textAlign: TextAlign.center, style: heading3),
               ),
             ],
           ),

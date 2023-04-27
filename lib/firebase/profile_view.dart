@@ -1,6 +1,8 @@
-import 'package:chimp_game/main.dart';
+import 'package:chimp_game/home_page.dart';
+import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:chimp_game/providers.dart';
 
 final user = FirebaseAuth.instance.currentUser;
 String? fullName = user?.displayName;
@@ -13,7 +15,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(30),
+        padding: EdgeInsets.all(medium),
         child: SafeArea(
           child: Column(
             children: [
@@ -21,32 +23,25 @@ class ProfilePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    height: 50,
-                    width: 50,
+                    height: large,
+                    width: large,
                     decoration: BoxDecoration(
-                        color: Colors.black,
+                        color: black,
                         borderRadius: BorderRadius.circular(100),
                         image: const DecorationImage(
                             image: AssetImage('assets/images/profile.png'))),
                   ),
-                  const SizedBox(width: 20),
+                  SizedBox(width: xsmall),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(fullName!,
-                          style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                      Text("uid: ${user?.uid}",
-                          style: const TextStyle(
-                              fontSize: 10, color: Colors.grey)),
+                      Text(fullName!, style: heading2),
+                      Text("uid: ${user?.uid}", style: form2),
                     ],
                   ),
-                  const SizedBox(width: 30),
+                  SizedBox(width: xsmall),
                   IconButton(
-                    icon: const Icon(Icons.settings,
-                        color: Colors.grey, size: 28),
+                    icon: Icon(Icons.settings, color: grey, size: 28),
                     onPressed: () {
                       Navigator.push(
                           context,
@@ -56,49 +51,25 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ],
               ),
-              const Divider(
-                height: 50,
-                color: Colors.black,
-              ),
+              Divider(height: large, color: Colors.black),
               Container(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  "Email:   ${user?.email}",
-                  style: const TextStyle(fontSize: 15),
-                ),
+                child: Text("Email:   ${user?.email}", style: form1),
               ),
-              const Divider(
-                height: 15,
-                color: Colors.transparent,
-              ),
+              SizedBox(height: small),
               Container(
                 alignment: Alignment.centerLeft,
-                child: const Text(
-                  "Highest Score:   not set yet",
-                  style: TextStyle(fontSize: 15),
-                ),
+                child: Text("Highest Score:   not set yet", style: form1),
               ),
-              const Divider(
-                height: 15,
-                color: Colors.transparent,
-              ),
+              SizedBox(height: small),
               Container(
                 alignment: Alignment.centerLeft,
-                child: const Text(
-                  "Region:   Washington, USA",
-                  style: TextStyle(fontSize: 15),
-                ),
+                child: Text("Region:   Washington, USA", style: form1),
               ),
-              const Divider(
-                height: 15,
-                color: Colors.transparent,
-              ),
+              SizedBox(height: small),
               Container(
                 alignment: Alignment.centerLeft,
-                child: const Text(
-                  "Leaderboard Rank:   not set yet",
-                  style: TextStyle(fontSize: 15),
-                ),
+                child: Text("Leaderboard Rank:   not set yet", style: form1),
               ),
             ],
           ),
@@ -109,73 +80,62 @@ class ProfilePage extends StatelessWidget {
 }
 
 class ProfileEditPage extends StatefulWidget {
-  final user = FirebaseAuth.instance.currentUser;
-  ProfileEditPage({super.key});
+  const ProfileEditPage({super.key});
   @override
   State<ProfileEditPage> createState() => _ProfileEditPageState();
 }
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
-  String? name = user!.displayName;
-  List<String> fullname = [];
-  TextEditingController _newFirstName = TextEditingController();
-  TextEditingController _newLastName = TextEditingController();
+  TextEditingController _newNickName = TextEditingController();
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
     super.initState();
-    List<String> fullname = name!.split(" ");
-    _newFirstName = TextEditingController(text: fullname[0]);
-    _newLastName = TextEditingController(text: fullname[1]);
+    _newNickName = TextEditingController(text: user!.displayName);
+  }
+
+  @override
+  void dispose() {
+    _newNickName.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Profile Name')),
+      appBar: AppBar(title: Text('Edit Profile Name', style: heading2)),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(32.0),
+          padding: EdgeInsets.all(medium),
           child: Column(children: [
-            Divider(
-              height: 50,
-              color: Colors.transparent,
+            TextField(
+              maxLength: 12,
+              style: form1,
+              controller: _newNickName,
+              enableSuggestions: false,
+              autocorrect: false,
+              keyboardType: TextInputType.name,
+              decoration:
+                  InputDecoration(hintText: 'New First Name', hintStyle: hint1),
             ),
-            TextField(
-              //text field/box for user to enter
-              controller: _newFirstName, //store email
-              enableSuggestions: false,
-              autocorrect: false,
-              keyboardType: TextInputType.emailAddress, //keyboard type with @
-              decoration: //hint text
-                  const InputDecoration(hintText: 'New First Name'),
-            ), //make text field for user to fill
-            TextField(
-              //text field/box for user to enter
-              controller: _newLastName, //store email
-              enableSuggestions: false,
-              autocorrect: false,
-              keyboardType: TextInputType.emailAddress, //keyboard type with @
-              decoration: //hint text
-                  const InputDecoration(hintText: 'New Last Name'),
-            ), //make text field for user to fill
             TextButton(
-              child: Text('Save'),
+              child: Text('Save', style: textButton1),
               onPressed: () async {
-                String firstName = _newFirstName.text;
-                String lastName = _newLastName.text;
-                setState(() {
-                  fullName = '$firstName $lastName';
-                });
+                if (_newNickName == null || _newNickName.text.isEmpty) {
+                  displayErrorMsg(context, "Nickname cannot be empty!");
+                } else {
+                  setState(() {
+                    fullName = _newNickName.text;
+                  });
+                  await user?.updateDisplayName(_newNickName.text);
 
-                print(fullName);
-                await user?.updateDisplayName(fullName);
-
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MyHomePage(pageIndex: 2)),
-                );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyHomePage(pageIndex: 2)),
+                  );
+                }
               },
             )
           ]),
