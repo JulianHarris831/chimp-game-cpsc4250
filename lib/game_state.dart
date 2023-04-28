@@ -4,29 +4,31 @@ class GameState {
   int _currentLives = 3;
   int _scores = 0;
 
-  final String _difficultyChosen;
+  String? _difficultyChosen;
   String? _gridSize; // based on _difficultyChosen
   int? _maxSequence; // based on _gridSize
   int? _numSequence; // number of sequence to memorize (increases with level)
   final double _minFadeTime = 1;
 
-  GameState(this._difficultyChosen) {
-    initGameState();
+  void setDifficulty(String difficultyChosen) {
+    _difficultyChosen = difficultyChosen;
   }
 
   initGameState() {
-    if (_difficultyChosen.toLowerCase() == 'easy') {
-      _gridSize = '3 x 3';
-      _maxSequence = 9;
-      _numSequence = 3; // starting sequence to memorize
-    } else if (_difficultyChosen.toLowerCase() == 'medium') {
-      _gridSize = '3 x 4';
-      _maxSequence = 12;
-      _numSequence = 4;
-    } else {
-      _gridSize = '3 x 5';
-      _maxSequence = 15;
-      _numSequence = 5;
+    if (_difficultyChosen != null) {
+      if (_difficultyChosen!.toLowerCase() == 'easy') {
+        _gridSize = '3 x 3';
+        _maxSequence = 9;
+        _numSequence = 3; // starting sequence to memorize
+      } else if (_difficultyChosen!.toLowerCase() == 'medium') {
+        _gridSize = '3 x 4';
+        _maxSequence = 12;
+        _numSequence = 4;
+      } else {
+        _gridSize = '3 x 5';
+        _maxSequence = 15;
+        _numSequence = 5;
+      }
     }
   }
 
@@ -34,7 +36,7 @@ class GameState {
   double get getFadeTime => _fadeTime;
   int get getCurrentLives => _currentLives;
   int get getScores => _scores;
-  String get getDifficultyChosen => _difficultyChosen;
+  String? get getDifficultyChosen => _difficultyChosen;
   String? get getGridSize => _gridSize;
   int? get getMaxSequence => _maxSequence;
   int? get getNumSequence => _numSequence;
@@ -52,9 +54,9 @@ class GameState {
     int baseScore = 10; // Base score for choosing the correct square
     int levelMultiplier = _currentLevel;
     int difficultyMultiplier;
-    if (_difficultyChosen.toLowerCase() == 'easy') {
+    if (_difficultyChosen!.toLowerCase() == 'easy') {
       difficultyMultiplier = 1;
-    } else if (_difficultyChosen.toLowerCase() == 'medium') {
+    } else if (_difficultyChosen!.toLowerCase() == 'medium') {
       difficultyMultiplier = 2;
     } else {
       difficultyMultiplier = 3;
@@ -68,9 +70,9 @@ class GameState {
   }
 
   // i.e. randomSeq = [7, 5, 4] in a '3 x 3' square grid =>
-  // the following sequence is created: [_][_][_]
-  //                                    [3][2][_]
-  //                                    [1][_][_]
+  // the following sequence is created: [_][_][_] # 0, 1, 2
+  //                                    [_][3][2] # 3, 4, 5
+  //                                    [_][1][_] # 6, 7, 8
   List<int> generateRandomSequence() {
     // generate random sequence
     List<int> randomSequence = List.generate(_maxSequence!, (i) => i);
