@@ -4,23 +4,23 @@ class GameState {
   int _currentLives = 3;
   int _scores = 0;
 
-  String? _difficultyChosen;
+  String? _difficultyChosen; // 'easy', 'medium', or 'hard'
   String? _gridSize; // based on _difficultyChosen
   int? _maxSequence; // based on _gridSize
   int? _numSequence; // number of sequence to memorize (increases with level)
   final double _minFadeTime = 1;
 
-  void setDifficulty(String difficultyChosen) {
-    _difficultyChosen = difficultyChosen;
+  void setDifficultySettings(String difficultyChosen) {
+    _difficultyChosen = difficultyChosen.toLowerCase();
   }
 
   initGameState() {
     if (_difficultyChosen != null) {
-      if (_difficultyChosen!.toLowerCase() == 'easy') {
+      if (_difficultyChosen == 'easy') {
         _gridSize = '3 x 3';
         _maxSequence = 9;
         _numSequence = 3; // starting sequence to memorize
-      } else if (_difficultyChosen!.toLowerCase() == 'medium') {
+      } else if (_difficultyChosen == 'medium') {
         _gridSize = '3 x 4';
         _maxSequence = 12;
         _numSequence = 4;
@@ -44,7 +44,7 @@ class GameState {
 
   void nextLevel() {
     _currentLevel++;
-    _fadeTime = _fadeTime * .8; // fadeTime decreases as level increases
+    _fadeTime = _fadeTime * .95; // fadeTime decreases as level increases
     if (_fadeTime < _minFadeTime) _fadeTime = _minFadeTime;
     _numSequence = _numSequence! + 1; // sequence to memorize increases w/ level
     if (_numSequence! > _maxSequence!) _numSequence = _maxSequence;
@@ -54,9 +54,9 @@ class GameState {
     int baseScore = 10; // Base score for choosing the correct square
     int levelMultiplier = _currentLevel;
     int difficultyMultiplier;
-    if (_difficultyChosen!.toLowerCase() == 'easy') {
+    if (_difficultyChosen == 'easy') {
       difficultyMultiplier = 1;
-    } else if (_difficultyChosen!.toLowerCase() == 'medium') {
+    } else if (_difficultyChosen == 'medium') {
       difficultyMultiplier = 2;
     } else {
       difficultyMultiplier = 3;
