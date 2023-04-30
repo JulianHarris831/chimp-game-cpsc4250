@@ -1,4 +1,6 @@
+import 'package:chimp_game/game_state_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 //use viewModels in the future
 
 //TODO: Right now displaying gridView explodes everything, work that out!
@@ -13,11 +15,11 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   //TODO: Move these vars into a viewModel for game_state.
-  final int gridSize = 3;
+  //final int gridSize = 3;
  //this is always 3, 4, or 5 w/the current game
-  final int sequenceSize = 4;
+  //final int sequenceSize = 4; == .numSequence
  //starts at 4, 5, or 6, but increments!
-  final Map sequence = {5:1, 3:2, 1:3, 6:4};
+  //final Map sequence = {5:1, 3:2, 1:3, 6:4}; == .randomSequence
 
   //even after doing all that above stuff, only display it if this bool is true
   final List<bool> pressed = [false, false, false, false, false, false, false, false, false];
@@ -27,7 +29,9 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-
+    final gameStateViewModel = context.watch<GameStateViewModel>();
+    gameStateViewModel.setDifficulty('easy');
+    gameStateViewModel.initializeGame();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(

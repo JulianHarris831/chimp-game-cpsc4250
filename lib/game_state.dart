@@ -6,7 +6,7 @@ class GameState {
 
   String? _difficultyChosen; // 'easy', 'medium', or 'hard'
   bool _started = false;
-  String? _gridSize; // based on _difficultyChosen
+  int? _gridSize; // based on _difficultyChosen
   int? _maxSequence; // based on _gridSize
   int? _numSequence; // number of sequence to memorize (increases with level)
   final double _minFadeTime = 1;
@@ -23,15 +23,15 @@ class GameState {
       _pressed = getPressed();
       _randomSequence = generateRandomSequence();
       if (_difficultyChosen == 'easy') {
-        _gridSize = '3 x 3';
+        _gridSize = 3; // 3 x 3
         _maxSequence = 9;
         _numSequence = 3; // starting sequence to memorize
       } else if (_difficultyChosen == 'medium') {
-        _gridSize = '3 x 4';
+        _gridSize = 4; // 3 x 4
         _maxSequence = 12;
         _numSequence = 4;
       } else {
-        _gridSize = '3 x 5';
+        _gridSize = 5; // 3 x 5
         _maxSequence = 15;
         _numSequence = 5;
       }
@@ -50,7 +50,7 @@ class GameState {
   int get getCurrentLives => _currentLives;
   int get getScores => _scores;
   String? get getDifficultyChosen => _difficultyChosen;
-  String? get getGridSize => _gridSize;
+  int? get getGridSize => _gridSize;
   int? get getMaxSequence => _maxSequence;
   int? get getNumSequence => _numSequence;
   double get getMinFadeTime => _minFadeTime;
