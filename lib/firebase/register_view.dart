@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chimp_game/home_page.dart';
 import 'package:chimp_game/providers.dart';
+import 'profile_view.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -48,7 +49,7 @@ class _RegisterViewState extends State<RegisterView> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(medium),
-          child: ListView(
+          child: Column(
             children: [
               TextField(
                 style: form1,
@@ -139,6 +140,22 @@ class _RegisterViewState extends State<RegisterView> {
                     child: Text('Click here to login!', style: textButton1),
                   )
                 ],
+              ),
+              SizedBox(height: large),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    isGuest = true;
+                  });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyHomePage(pageIndex: 0)));
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(orange),
+                ),
+                child: Text('Continue as Guest', style: form1),
               )
             ],
           ),

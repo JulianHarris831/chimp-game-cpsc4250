@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chimp_game/home_page.dart';
 import 'package:chimp_game/providers.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'profile_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -19,8 +19,6 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   String? temp;
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -47,6 +45,7 @@ class _LoginViewState extends State<LoginView> {
           child: Column(
             children: [
               TextField(
+                //key: Key("EmailField"),
                 style: form1,
                 controller: _email,
                 enableSuggestions: false,
@@ -112,6 +111,22 @@ class _LoginViewState extends State<LoginView> {
                     child: Text('Click here to register!', style: textButton1),
                   )
                 ],
+              ),
+              SizedBox(height: large),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    isGuest = true;
+                  });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyHomePage(pageIndex: 0)));
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(orange),
+                ),
+                child: Text('Continue as Guest', style: form1),
               )
             ],
           ),

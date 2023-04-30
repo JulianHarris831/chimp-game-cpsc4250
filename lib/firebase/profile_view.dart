@@ -7,6 +7,7 @@ import 'logout.dart';
 
 final user = FirebaseAuth.instance.currentUser;
 String? fullName = user?.displayName;
+bool isGuest = false;
 
 class ProfilePage extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser;
@@ -18,66 +19,137 @@ class ProfilePage extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.all(medium),
         child: SafeArea(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    height: large,
-                    width: large,
-                    decoration: BoxDecoration(
-                        color: black,
-                        borderRadius: BorderRadius.circular(100),
-                        image: const DecorationImage(
-                            image: AssetImage('assets/images/profile.png'))),
-                  ),
-                  SizedBox(width: xsmall),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(fullName!, style: heading2),
-                      Text("uid: ${user?.uid}", style: form2),
-                    ],
-                  ),
-                  SizedBox(width: xsmall),
-                  IconButton(
-                    icon: Icon(Icons.settings, color: grey, size: 28),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfileEditPage()));
-                    },
-                  ),
-                ],
-              ),
-              Divider(height: large, color: Colors.black),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text("Email:   ${user?.email}", style: form1),
-              ),
-              SizedBox(height: small),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text("Highest Score:   not set yet", style: form1),
-              ),
-              SizedBox(height: small),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text("Region:   Washington, USA", style: form1),
-              ),
-              SizedBox(height: small),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text("Leaderboard Rank:   not set yet", style: form1),
-              ),
-              SizedBox(height: small),
-              Logout()
-            ],
-          ),
+          child:
+              isGuest ? const GuestProfile() : const FireBaseAccountProfile(),
         ),
       ),
+    );
+  }
+}
+
+class GuestProfile extends StatelessWidget {
+  const GuestProfile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: large,
+              width: large,
+              decoration: BoxDecoration(
+                  color: black,
+                  borderRadius: BorderRadius.circular(100),
+                  image: const DecorationImage(
+                      image: AssetImage('assets/images/profile.png'))),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Guest", style: heading2),
+              ],
+            ),
+            SizedBox(width: xsmall),
+            SizedBox(width: xsmall),
+            SizedBox(width: xsmall),
+            SizedBox(width: xsmall),
+          ],
+        ),
+        Divider(height: large, color: Colors.black),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Not registered yet?", style: textButton2),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/register/', (route) => false);
+              },
+              child: Text('Click here to register!', style: textButton1),
+            )
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Already have an account?", style: textButton2),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/login/', (route) => false);
+              },
+              child: Text('Click here to login!', style: textButton1),
+            )
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class FireBaseAccountProfile extends StatelessWidget {
+  const FireBaseAccountProfile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: large,
+              width: large,
+              decoration: BoxDecoration(
+                  color: black,
+                  borderRadius: BorderRadius.circular(100),
+                  image: const DecorationImage(
+                      image: AssetImage('assets/images/profile.png'))),
+            ),
+            SizedBox(width: xsmall),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(fullName!, style: heading2),
+                Text("uid: ${user?.uid}", style: form2),
+              ],
+            ),
+            SizedBox(width: xsmall),
+            IconButton(
+              icon: Icon(Icons.settings, color: grey, size: 28),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ProfileEditPage()));
+              },
+            ),
+          ],
+        ),
+        Divider(height: large, color: Colors.black),
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text("Email:   ${user?.email}", style: form1),
+        ),
+        SizedBox(height: small),
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text("Highest Score:   not set yet", style: form1),
+        ),
+        SizedBox(height: small),
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text("Region:   Washington, USA", style: form1),
+        ),
+        SizedBox(height: small),
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text("Leaderboard Rank:   not set yet", style: form1),
+        ),
+        SizedBox(height: small),
+        Logout()
+      ],
     );
   }
 }
