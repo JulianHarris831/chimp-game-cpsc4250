@@ -3,6 +3,7 @@ import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chimp_game/providers.dart';
+import 'logout.dart';
 
 final user = FirebaseAuth.instance.currentUser;
 String? fullName = user?.displayName;
@@ -71,6 +72,8 @@ class ProfilePage extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text("Leaderboard Rank:   not set yet", style: form1),
               ),
+              SizedBox(height: small),
+              Logout()
             ],
           ),
         ),
