@@ -5,17 +5,23 @@ class GameState {
   int _scores = 0;
 
   String? _difficultyChosen; // 'easy', 'medium', or 'hard'
+  bool _started = false;
   String? _gridSize; // based on _difficultyChosen
   int? _maxSequence; // based on _gridSize
   int? _numSequence; // number of sequence to memorize (increases with level)
   final double _minFadeTime = 1;
+  Map? _randomSequence;
+  List<bool>? _pressed;
 
   void setDifficultySettings(String difficultyChosen) {
     _difficultyChosen = difficultyChosen.toLowerCase();
   }
+  void setStarted(){_started = true;}
 
   initGameState() {
     if (_difficultyChosen != null) {
+      _pressed = getPressed();
+      _randomSequence = generateRandomSequence();
       if (_difficultyChosen == 'easy') {
         _gridSize = '3 x 3';
         _maxSequence = 9;
@@ -32,6 +38,13 @@ class GameState {
     }
   }
 
+  resetGameState() {
+    _started = false;
+    _pressed = getPressed();
+    _randomSequence = generateRandomSequence();
+    //user sequence needs to get reset here too
+  }
+
   int get getCurrentLevel => _currentLevel;
   double get getFadeTime => _fadeTime;
   int get getCurrentLives => _currentLives;
@@ -41,6 +54,7 @@ class GameState {
   int? get getMaxSequence => _maxSequence;
   int? get getNumSequence => _numSequence;
   double get getMinFadeTime => _minFadeTime;
+  bool get getStarted => _started;
 
   void nextLevel() {
     _currentLevel++;
@@ -73,12 +87,25 @@ class GameState {
   // the following sequence is created: [_][_][_] # 0, 1, 2
   //                                    [_][3][2] # 3, 4, 5
   //                                    [_][1][_] # 6, 7, 8
-  List<int> generateRandomSequence() {
+  generateRandomSequence() {
     // generate random sequence
     List<int> randomSequence = List.generate(_maxSequence!, (i) => i);
     randomSequence.shuffle();
+    randomSequence = randomSequence.take(_numSequence!).toList();
+
+    Map mapSequence = {};
+    for(int i = 0; i < _numSequence!; i++){
+      mapSequence[randomSequence[i]] = i;
+    }
 
     // return the number of sequence required for the current level
-    return randomSequence.take(_numSequence!).toList();
+    _randomSequence = mapSequence;
+  }
+  getPressed() {
+    List<bool> pressed = [];
+    for(int i = 0; i < _maxSequence!; i++){
+      pressed.add(false);
+    }
+    _pressed = pressed;
   }
 }
