@@ -23,15 +23,15 @@ class GameState {
       _pressed = getPressed();
       _randomSequence = generateRandomSequence();
       if (_difficultyChosen == 'easy') {
-        _gridSize = 3; // 3 x 3
+        _gridSize = 9; // 3 x 3
         _maxSequence = 9;
         _numSequence = 3; // starting sequence to memorize
       } else if (_difficultyChosen == 'medium') {
-        _gridSize = 4; // 3 x 4
+        _gridSize = 12; // 3 x 4
         _maxSequence = 12;
         _numSequence = 4;
       } else {
-        _gridSize = 5; // 3 x 5
+        _gridSize = 15; // 3 x 5
         _maxSequence = 15;
         _numSequence = 5;
       }
@@ -55,6 +55,8 @@ class GameState {
   int? get getNumSequence => _numSequence;
   double get getMinFadeTime => _minFadeTime;
   bool get getStarted => _started;
+  Map? get sequence => _randomSequence;
+  List<bool>? get pressed => _pressed;
 
   void nextLevel() {
     _currentLevel++;

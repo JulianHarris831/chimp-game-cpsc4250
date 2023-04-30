@@ -80,7 +80,7 @@ class DifficultyPage extends StatelessWidget {
             ),
           ),
            */
-          Container(height: 400, width: 400, child: GamePage()),
+          Expanded(child: GamePage()),
         ],
       ),
     );
