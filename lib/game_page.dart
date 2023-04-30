@@ -31,14 +31,14 @@ class _GamePageState extends State<GamePage> {
           crossAxisSpacing: 10.0,
           crossAxisCount: 3,
           //How can I have a dynamic number of children here? I want 9, 12, and 15.
-          children: List.generate(gameStateViewModel.getGameState.getGridSize!, (index) {
-            if (index < gameStateViewModel.getGameState.getGridSize!) {
+          children: List.generate(9, (index) { //gameStateViewModel.getGameState.getGridSize!
+            if (index < 9) { //gameStateViewModel.getGameState.getGridSize!
               return ElevatedButton(
                 onPressed: () {
-                  gameStateViewModel.onButtonPressed(index);
+                  //gameStateViewModel.onButtonPressed(index);
                 },
                 //index should be the position of index in sequence. use a map?
-                child: (gameStateViewModel.getPressed[index] || gameStateViewModel.started) ? Text('${gameStateViewModel.getSequence[index]}') : const SizedBox(),
+                child: SizedBox(),//(gameStateViewModel.getPressed[index] || gameStateViewModel.started) ? Text('${gameStateViewModel.getSequence[index]}') : const SizedBox(),
               );
             } else {
               return const SizedBox.shrink();
