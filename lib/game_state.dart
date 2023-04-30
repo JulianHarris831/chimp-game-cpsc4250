@@ -3,10 +3,11 @@ class GameState {
   double _fadeTime = 3; // sequence fade time; time to memorize (in s)
   int _currentLives = 3;
   int _scores = 0;
+  int _playerSequenceIndex = 0; // current index the player needs to taps
 
   // default value: 'easy' difficulty 3x3 GameState
-  String _difficultyChosen = 'easy'; // 'easy', 'medium', or 'hard'
   bool _started = false;
+  String _difficultyChosen = 'easy'; // 'easy', 'medium', or 'hard'
   int _gridSize = 9; // based on _difficultyChosen
   int _maxSequence = 9; // based on _gridSize
   int _numSequence = 3; // sequence to memorize (increases with level)
@@ -22,6 +23,9 @@ class GameState {
   void setStarted() { _started = true; }
 
   void initGameState() {
+    _started = false; _currentLevel = 1;
+    _fadeTime = 3; _currentLives = 3;
+    _scores = 0; _playerSequenceIndex = 0;
     if (_difficultyChosen == 'easy') {
       _gridSize = 9; // 3 x 3
       _maxSequence = 9;
@@ -39,8 +43,16 @@ class GameState {
     setPressed();
   }
 
-  resetGameState() {
+  void resetGameState() {
+    _currentLevel = 1; _fadeTime = 3;
+    _currentLives = 3; _scores = 0;
+    refreshGameState();
+    // Try again with same difficulty settings
+  }
+
+  void refreshGameState() {
     _started = false;
+    _playerSequenceIndex = 0;
     setPressed();
     generateRandomSequence(); // generate a new random sequence
     //user sequence needs to get reset here too
@@ -50,6 +62,7 @@ class GameState {
   double get getFadeTime => _fadeTime;
   int get getCurrentLives => _currentLives;
   int get getScores => _scores;
+  int get getPlayerSequenceIndex => _playerSequenceIndex;
   String get getDifficultyChosen => _difficultyChosen;
   bool get getStarted => _started;
   int get getGridSize => _gridSize;
@@ -82,6 +95,10 @@ class GameState {
     _scores += scoreGained;
   }
 
+  void updatePlayerSequenceIndex() {
+    _playerSequenceIndex++; // when the player taps the correct sequence index
+  }
+
   void removeLife() {
     if (_currentLives > 0) _currentLives--;
   }
@@ -90,7 +107,7 @@ class GameState {
   // the following sequence is created: [_][_][_] # 0, 1, 2
   //                                    [_][3][2] # 3, 4, 5
   //                                    [_][1][_] # 6, 7, 8
-  generateRandomSequence() {
+  void generateRandomSequence() {
     // generate random sequence
     List<int> randomSequence = List.generate(_maxSequence, (i) => i);
     randomSequence.shuffle();
@@ -103,7 +120,7 @@ class GameState {
     _randomSequence = mapSequence;
   }
 
-  setPressed() {
+  void setPressed() {
     List<bool> pressed = [];
     for(int i = 0; i < _maxSequence; i++){
       pressed.add(false);
