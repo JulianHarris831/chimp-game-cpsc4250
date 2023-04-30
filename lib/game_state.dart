@@ -4,11 +4,11 @@ class GameState {
   int _currentLives = 3;
   int _scores = 0;
 
-  String? _difficultyChosen; // 'easy', 'medium', or 'hard'
+  String _difficultyChosen = 'easy'; // 'easy', 'medium', or 'hard'
   bool _started = false;
-  int? _gridSize; // based on _difficultyChosen
-  int? _maxSequence; // based on _gridSize
-  int? _numSequence; // number of sequence to memorize (increases with level)
+  int _gridSize = 9; // based on _difficultyChosen
+  int _maxSequence = 9; // based on _gridSize
+  int _numSequence = 3; // number of sequence to memorize (increases with level)
   final double _minFadeTime = 1;
   Map? _randomSequence;
   List<bool>? _pressed;
@@ -18,23 +18,23 @@ class GameState {
   }
   void setStarted(){_started = true;}
 
-  initGameState() {
-    if (_difficultyChosen != null) {
-      _pressed = getPressed();
-      _randomSequence = generateRandomSequence();
-      if (_difficultyChosen == 'easy') {
-        _gridSize = 9; // 3 x 3
-        _maxSequence = 9;
-        _numSequence = 3; // starting sequence to memorize
-      } else if (_difficultyChosen == 'medium') {
-        _gridSize = 12; // 3 x 4
-        _maxSequence = 12;
-        _numSequence = 4;
-      } else {
-        _gridSize = 15; // 3 x 5
-        _maxSequence = 15;
-        _numSequence = 5;
-      }
+  void initGameState() {
+    print("Entered initGameState");
+    getPressed();
+    generateRandomSequence();
+    print("Before easy");
+    if (_difficultyChosen == 'easy') {
+      _gridSize = 9; // 3 x 3
+      _maxSequence = 9;
+      _numSequence = 3; // starting sequence to memorize
+    } else if (_difficultyChosen == 'medium') {
+      _gridSize = 12; // 3 x 4
+      _maxSequence = 12;
+      _numSequence = 4;
+    } else {
+      _gridSize = 15; // 3 x 5
+      _maxSequence = 15;
+      _numSequence = 5;
     }
   }
 
@@ -62,8 +62,8 @@ class GameState {
     _currentLevel++;
     _fadeTime = _fadeTime * .95; // fadeTime decreases as level increases
     if (_fadeTime < _minFadeTime) _fadeTime = _minFadeTime;
-    _numSequence = _numSequence! + 1; // sequence to memorize increases w/ level
-    if (_numSequence! > _maxSequence!) _numSequence = _maxSequence;
+    _numSequence = _numSequence + 1; // sequence to memorize increases w/ level
+    if (_numSequence > _maxSequence) _numSequence = _maxSequence;
   }
 
   void addToScores() {
@@ -91,12 +91,12 @@ class GameState {
   //                                    [_][1][_] # 6, 7, 8
   generateRandomSequence() {
     // generate random sequence
-    List<int> randomSequence = List.generate(_maxSequence!, (i) => i);
+    List<int> randomSequence = List.generate(_maxSequence, (i) => i);
     randomSequence.shuffle();
-    randomSequence = randomSequence.take(_numSequence!).toList();
+    randomSequence = randomSequence.take(_numSequence).toList();
 
     Map mapSequence = {};
-    for(int i = 0; i < _numSequence!; i++){
+    for(int i = 0; i < _numSequence; i++){
       mapSequence[randomSequence[i]] = i;
     }
 
@@ -105,7 +105,7 @@ class GameState {
   }
   getPressed() {
     List<bool> pressed = [];
-    for(int i = 0; i < _maxSequence!; i++){
+    for(int i = 0; i < _maxSequence; i++){
       pressed.add(false);
     }
     _pressed = pressed;
