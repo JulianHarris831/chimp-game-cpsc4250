@@ -4,25 +4,24 @@ class GameState {
   int _currentLives = 3;
   int _scores = 0;
 
+  // default value: 'easy' difficulty 3x3 GameState
   String _difficultyChosen = 'easy'; // 'easy', 'medium', or 'hard'
   bool _started = false;
   int _gridSize = 9; // based on _difficultyChosen
   int _maxSequence = 9; // based on _gridSize
-  int _numSequence = 3; // number of sequence to memorize (increases with level)
+  int _numSequence = 3; // sequence to memorize (increases with level)
   final double _minFadeTime = 1;
+
   Map? _randomSequence;
   List<bool>? _pressed;
 
   void setDifficultySettings(String difficultyChosen) {
     _difficultyChosen = difficultyChosen.toLowerCase();
   }
-  void setStarted(){_started = true;}
+
+  void setStarted() { _started = true; }
 
   void initGameState() {
-    print("Entered initGameState");
-    getPressed();
-    generateRandomSequence();
-    print("Before easy");
     if (_difficultyChosen == 'easy') {
       _gridSize = 9; // 3 x 3
       _maxSequence = 9;
@@ -36,12 +35,14 @@ class GameState {
       _maxSequence = 15;
       _numSequence = 5;
     }
+    generateRandomSequence();
+    setPressed();
   }
 
   resetGameState() {
     _started = false;
-    _pressed = getPressed();
-    _randomSequence = generateRandomSequence();
+    setPressed();
+    generateRandomSequence(); // generate a new random sequence
     //user sequence needs to get reset here too
   }
 
@@ -49,14 +50,14 @@ class GameState {
   double get getFadeTime => _fadeTime;
   int get getCurrentLives => _currentLives;
   int get getScores => _scores;
-  String? get getDifficultyChosen => _difficultyChosen;
-  int? get getGridSize => _gridSize;
-  int? get getMaxSequence => _maxSequence;
-  int? get getNumSequence => _numSequence;
-  double get getMinFadeTime => _minFadeTime;
+  String get getDifficultyChosen => _difficultyChosen;
   bool get getStarted => _started;
-  Map? get sequence => _randomSequence;
-  List<bool>? get pressed => _pressed;
+  int get getGridSize => _gridSize;
+  int get getMaxSequence => _maxSequence;
+  int get getNumSequence => _numSequence;
+  double get getMinFadeTime => _minFadeTime;
+  Map? get getSequence => _randomSequence;
+  List<bool>? get getPressed => _pressed;
 
   void nextLevel() {
     _currentLevel++;
@@ -99,11 +100,10 @@ class GameState {
     for(int i = 0; i < _numSequence; i++){
       mapSequence[randomSequence[i]] = i;
     }
-
-    // return the number of sequence required for the current level
     _randomSequence = mapSequence;
   }
-  getPressed() {
+
+  setPressed() {
     List<bool> pressed = [];
     for(int i = 0; i < _maxSequence; i++){
       pressed.add(false);

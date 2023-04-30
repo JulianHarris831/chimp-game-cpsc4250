@@ -21,16 +21,19 @@ class GameStateViewModel extends ChangeNotifier {
 
   void onButtonPressed(int index){
     //also need to verify lost lives and stuff!
-    _gameState.pressed![index] = true;
     _gameState.setStarted();
+    pressed![index] = true;
     notifyListeners();
   }
 
   GameState get getGameState => _gameState;
-  //List<int> get generateSequence => _gameState.generateRandomSequence();
-  Map get getSequence => _gameState.sequence!;
-  List<bool> get getPressed => _gameState.pressed!;
   bool get started => _gameState.getStarted;
+  String get level => 'Level ${_gameState.getCurrentLevel}';
+  double get fadeTime => _gameState.getFadeTime;
+  int get lives => _gameState.getCurrentLives;
+  int get scores => _gameState.getScores;
+  Map? get sequence => _gameState.getSequence;
+  List<bool>? get pressed => _gameState.getPressed;
 
   void updateLevel() {
     _gameState.nextLevel();

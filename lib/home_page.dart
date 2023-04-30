@@ -1,6 +1,6 @@
 import 'package:chimp_game/firebase/profile_view.dart';
 import 'package:flutter/material.dart';
-import 'main_menu_view.dart';
+import 'main_menu_page.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.pageIndex}) : super(key: key);
@@ -47,23 +47,19 @@ class _MyHomePageState extends State<MyHomePage> {
             elevation: 0,
             type: BottomNavigationBarType.fixed,
             currentIndex: selectedIndex,
-            onTap: (value) {
-              setState(() {
-                selectedIndex = value;
-              });
-            },
+            onTap: (value) { setState(() => selectedIndex = value); },
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                label: '',
+                label: 'Home',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.leaderboard),
-                label: '',
+                label: 'Leaderboard',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person),
-                label: '',
+                label: 'My Profile',
               ),
             ],
           ),

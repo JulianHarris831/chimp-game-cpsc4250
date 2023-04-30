@@ -2,7 +2,7 @@ import 'package:chimp_game/home_page.dart';
 import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:chimp_game/providers.dart';
+import 'package:chimp_game/alerts.dart';
 import 'logout.dart';
 
 final user = FirebaseAuth.instance.currentUser;
@@ -121,8 +121,8 @@ class FireBaseAccountProfile extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.settings, color: grey, size: 28),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProfileEditPage()));
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => const ProfileEditPage()));
               },
             ),
           ],
@@ -148,7 +148,7 @@ class FireBaseAccountProfile extends StatelessWidget {
           child: Text("Leaderboard Rank:   not set yet", style: form1),
         ),
         SizedBox(height: small),
-        Logout()
+        const Logout()
       ],
     );
   }
@@ -205,10 +205,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   });
                   await user?.updateDisplayName(_newNickName.text);
 
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyHomePage(pageIndex: 2)),
+                  Navigator.pushReplacement(context, MaterialPageRoute(
+                      builder: (context) => const MyHomePage(pageIndex: 2)),
                   );
                 }
               },

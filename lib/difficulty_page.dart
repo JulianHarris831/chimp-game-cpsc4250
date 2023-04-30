@@ -13,75 +13,81 @@ import 'game_state_view_model.dart';
 class DifficultyPage extends StatelessWidget {
   const DifficultyPage({Key? key}) : super(key: key);
 
+  _onDifficultyChosen(BuildContext context, String difficulty) {
+    final gameStateViewModel = context.read<GameStateViewModel>();
+    gameStateViewModel.setDifficulty(difficulty);
+    gameStateViewModel.initializeGame();
+
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const GamePage()));
+  }
+
   @override
   Widget build(BuildContext context) {
-    final gameStateViewModel = context.watch<GameStateViewModel>();
-
     return Scaffold(
       appBar: AppBar(
-        title: Text("Level ${gameStateViewModel.getGameState.getCurrentLevel}"),
+        title: const Text("Choose your Difficulty"),
       ),
-      body: Column (
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          /*
-          SizedBox(
-            width: 300.0,
-            height: 50.0,
-            child: ElevatedButton.icon(
+      body: Center(
+        child: Column (
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 300.0,
+              height: 50.0,
+              child: ElevatedButton.icon( //focus on implementing 3x3 game first
+                  onPressed: () { _onDifficultyChosen(context, "Easy"); },
+                  icon: const Icon(
+                    Icons.directions_run,
+                    size: 24.0,
+                  ),
+                label: const Text("Easy"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(height:30),
+            SizedBox(
+              width: 300.0,
+              height: 50.0,
+              child: ElevatedButton.icon(
                 onPressed: () {
-                  //call viewModel, set to easy
+                  //call viewModel, set to 'medium'
                   //call game_page (after difficulty set)
                 }, //navigation happens here!
-                icon: Icon(
-                  Icons.directions_run,
+                icon: const Icon(
+                  Icons.directions_bike,
                   size: 24.0,
                 ),
-              label: Text("Easy"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
+                label: const Text("Medium"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orangeAccent,
+                  foregroundColor: Colors.white,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height:30),
-          SizedBox(
-            width: 300.0,
-            height: 50.0,
-            child: ElevatedButton.icon(
-              onPressed: () {
-              },
-              icon: Icon(
-                Icons.directions_bike,
-                size: 24.0,
-              ),
-              label: Text("Medium"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orangeAccent,
-                foregroundColor: Colors.white,
-              ),
-            ),
-          ),
-          const SizedBox(height:30),
-          SizedBox(
-            width: 300.0,
-            height: 50.0,
-            child: ElevatedButton.icon(
-              onPressed: () {}, //navigation happens here!
-              icon: Icon(
-                Icons.directions_car,
-                size: 24.0,
-              ),
-              label: Text("Hard"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
+            const SizedBox(height:30),
+            SizedBox(
+              width: 300.0,
+              height: 50.0,
+              child: ElevatedButton.icon(
+                onPressed: () {}, //navigation happens here!
+                icon: const Icon(
+                  Icons.directions_car,
+                  size: 24.0,
+                ),
+                label: const Text("Hard"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                ),
               ),
             ),
-          ),
-           */
-          Expanded(child: GamePage()),
-        ],
+            //Expanded(child: GamePage()),
+          ],
+        ),
       ),
     );
   }

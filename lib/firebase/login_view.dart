@@ -2,7 +2,7 @@ import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chimp_game/home_page.dart';
-import 'package:chimp_game/providers.dart';
+import 'package:chimp_game/alerts.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'profile_view.dart';
@@ -82,10 +82,8 @@ class _LoginViewState extends State<LoginView> {
                         await SharedPreferences.getInstance();
                     await prefs.setInt(
                         'last_login', DateTime.now().millisecondsSinceEpoch);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MyHomePage(pageIndex: 0)));
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => const MyHomePage(pageIndex: 0)));
                   } on FirebaseAuthException catch (e) {
                     temp = e.code;
                     if (temp == 'user-not-found') {
@@ -118,10 +116,8 @@ class _LoginViewState extends State<LoginView> {
                   setState(() {
                     isGuest = true;
                   });
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MyHomePage(pageIndex: 0)));
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => const MyHomePage(pageIndex: 0)));
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(orange),

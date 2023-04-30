@@ -2,7 +2,7 @@ import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chimp_game/home_page.dart';
-import 'package:chimp_game/providers.dart';
+import 'package:chimp_game/alerts.dart';
 import 'profile_view.dart';
 
 class RegisterView extends StatefulWidget {
@@ -106,10 +106,8 @@ class _RegisterViewState extends State<RegisterView> {
                       final user = FirebaseAuth.instance.currentUser;
                       await user?.updateDisplayName(fullName);
 
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyHomePage(pageIndex: 0)));
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => const MyHomePage(pageIndex: 0)));
                     } on FirebaseAuthException catch (e) {
                       setState(() {
                         temp = e.code;
@@ -147,10 +145,8 @@ class _RegisterViewState extends State<RegisterView> {
                   setState(() {
                     isGuest = true;
                   });
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MyHomePage(pageIndex: 0)));
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => const MyHomePage(pageIndex: 0)));
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(orange),
