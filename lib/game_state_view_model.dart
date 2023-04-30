@@ -14,6 +14,11 @@ class GameStateViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void reset() {
+    _gameState.resetGameState();
+    notifyListeners();
+  }
+
   GameState get getGameState => _gameState;
   List<int> get generateSequence => _gameState.generateRandomSequence();
 

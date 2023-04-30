@@ -1,3 +1,4 @@
+import 'package:chimp_game/difficulty_page.dart';
 import 'package:chimp_game/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,8 @@ class _MainMenuPageState extends State<MainMenuPage> {
               SizedBox(height: large * 2),
               ElevatedButton(
                 onPressed: () {
-                  //navigate to gameplay page here
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const DifficultyPage()));
                 },
                 style: ButtonStyle(
                   minimumSize:
