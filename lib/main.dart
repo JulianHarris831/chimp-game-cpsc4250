@@ -7,6 +7,7 @@ import 'firebase/auto_login.dart';
 import 'main_menu_page.dart';
 
 void main() async {
+  /*
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
@@ -15,11 +16,12 @@ void main() async {
     autoLogin = true;
   }
 
-  runApp(LoginOrRegister(autoLogin: autoLogin));
+   */
+
+  runApp(const MyApp());
 }
 
-/* FOR TESTING WITHOUT FIREBASE, USE THIS MYAPP
-  runApp(const MyApp());
+///* //FOR TESTING WITHOUT FIREBASE, USE THIS MYAPP
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -33,4 +35,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
- */
+ //*/

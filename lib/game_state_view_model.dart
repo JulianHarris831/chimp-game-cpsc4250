@@ -29,7 +29,7 @@ class GameStateViewModel extends ChangeNotifier {
     if (!started) { _gameState.setStarted(); }
     if (!pressed![index]) {
       pressed![index] = true;
-      if (playerIndex == sequence![index]-1) {
+      if (sequence!.containsKey(index) && playerIndex == sequence![index]-1) {
         print('Player taps on the correct square: $playerIndex Add scores..');
         _gameState.addToScores();
         _gameState.updatePlayerSequenceIndex();
