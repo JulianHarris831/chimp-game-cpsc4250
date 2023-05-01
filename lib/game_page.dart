@@ -76,7 +76,9 @@ class _GamePageState extends State<GamePage> {
                     //child: SizedBox(),
                     child: (gameStateViewModel.pressed![index]
                       || !gameStateViewModel.started)
-                      ? Text('${gameStateViewModel.sequence![index]}')
+                      ? gameStateViewModel.sequence!.containsKey(index)
+                        ? Text('${gameStateViewModel.sequence![index]}', style: heading5)
+                        : const SizedBox()
                       : const SizedBox(),
                   );
                 } else {

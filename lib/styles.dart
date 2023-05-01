@@ -21,6 +21,9 @@ TextStyle heading3 = GoogleFonts.poppins(
 TextStyle heading4 = GoogleFonts.poppins(
     fontSize: 40, fontWeight: FontWeight.bold, color: black);
 
+TextStyle heading5 = GoogleFonts.poppins(
+    fontSize: 25, fontWeight: FontWeight.bold, color: white);
+
 TextStyle content1 = GoogleFonts.poppins(fontSize: 15, color: black);
 
 TextStyle bold25 = const TextStyle(fontWeight: FontWeight.bold, fontSize: 25);

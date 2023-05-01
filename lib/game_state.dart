@@ -46,6 +46,9 @@ class GameState {
   void resetGameState() {
     _currentLevel = 1; _fadeTime = 3;
     _currentLives = 3; _scores = 0;
+    if(_difficultyChosen == 'easy') {_numSequence = 3;}
+    else if(_difficultyChosen == 'medium') {_numSequence = 4;}
+    else {_numSequence = 5;}
     refreshGameState();
     // Try again with same difficulty settings
   }
