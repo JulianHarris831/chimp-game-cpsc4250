@@ -82,8 +82,11 @@ class _LoginViewState extends State<LoginView> {
                         await SharedPreferences.getInstance();
                     await prefs.setInt(
                         'last_login', DateTime.now().millisecondsSinceEpoch);
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => const MyHomePage(pageIndex: 0)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const MyHomePage(pageIndex: 0)));
                   } on FirebaseAuthException catch (e) {
                     temp = e.code;
                     if (temp == 'user-not-found') {
@@ -116,8 +119,11 @@ class _LoginViewState extends State<LoginView> {
                   setState(() {
                     isGuest = true;
                   });
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const MyHomePage(pageIndex: 0)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const MyHomePage(pageIndex: 0)));
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(orange),

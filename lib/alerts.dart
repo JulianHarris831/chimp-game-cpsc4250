@@ -7,25 +7,24 @@ import 'styles.dart';
 
 displayErrorMsg(BuildContext context, String errorMsg) {
   Alert(
-    context: context,
-    type: AlertType.error,
-    content: Column(
-      children: [
-        SizedBox(height: medium),
-        Text("An error occured!", style: bold25, textAlign: TextAlign.center),
-        Text(errorMsg, style: bold25, textAlign: TextAlign.center),
-      ],
-    ),
-    buttons: [
-      DialogButton(
-        onPressed: () {
-          Navigator.of(context, rootNavigator: true).pop();
-        },
-        color: orange,
-        child: Text("Try again", style: bold15),
+      context: context,
+      type: AlertType.error,
+      content: Column(
+        children: [
+          SizedBox(height: medium),
+          Text("An error occured!", style: bold25, textAlign: TextAlign.center),
+          Text(errorMsg, style: bold25, textAlign: TextAlign.center),
+        ],
       ),
-    ]
-  ).show();
+      buttons: [
+        DialogButton(
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+          color: orange,
+          child: Text("Try again", style: bold15),
+        ),
+      ]).show();
 }
 
 displayGameOver(BuildContext context) {

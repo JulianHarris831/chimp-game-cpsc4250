@@ -121,8 +121,10 @@ class FireBaseAccountProfile extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.settings, color: grey, size: 28),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const ProfileEditPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfileEditPage()));
               },
             ),
           ],
@@ -205,8 +207,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   });
                   await user?.updateDisplayName(_newNickName.text);
 
-                  Navigator.pushReplacement(context, MaterialPageRoute(
-                      builder: (context) => const MyHomePage(pageIndex: 2)),
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MyHomePage(pageIndex: 2)),
                   );
                 }
               },
