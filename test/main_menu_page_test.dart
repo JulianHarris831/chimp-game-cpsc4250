@@ -4,7 +4,7 @@ import 'package:chimp_game/difficulty_page.dart';
 import 'package:chimp_game/main_menu_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-// flutter test test/main_menu_view_test.dart
+// flutter test test/main_menu_page_test.dart
 
 void main() {
   testWidgets('Check every displayed text/button', (tester) async {
