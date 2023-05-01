@@ -115,7 +115,7 @@ class GameState {
 
     Map mapSequence = {};
     for(int i = 0; i < _numSequence; i++){
-      mapSequence[randomSequence[i]] = i;
+      mapSequence[randomSequence[i]] = i+1;
     }
     _randomSequence = mapSequence;
   }
