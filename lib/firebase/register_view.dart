@@ -106,8 +106,16 @@ class _RegisterViewState extends State<RegisterView> {
                       final user = FirebaseAuth.instance.currentUser;
                       await user?.updateDisplayName(fullName);
 
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => const MyHomePage(pageIndex: 0)));
+                      setState(() {
+                        isGuest = false;
+                        fullName2 = fullName;
+                      });
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const MyHomePage(pageIndex: 0)));
                     } on FirebaseAuthException catch (e) {
                       setState(() {
                         temp = e.code;
@@ -145,8 +153,11 @@ class _RegisterViewState extends State<RegisterView> {
                   setState(() {
                     isGuest = true;
                   });
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const MyHomePage(pageIndex: 0)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const MyHomePage(pageIndex: 0)));
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(orange),

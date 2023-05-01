@@ -82,6 +82,10 @@ class _LoginViewState extends State<LoginView> {
                         await SharedPreferences.getInstance();
                     await prefs.setInt(
                         'last_login', DateTime.now().millisecondsSinceEpoch);
+                    setState(() {
+                      isGuest = false;
+                      fullName2 = user!.displayName;
+                    });
                     Navigator.push(
                         context,
                         MaterialPageRoute(

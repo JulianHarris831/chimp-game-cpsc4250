@@ -6,7 +6,7 @@ import 'package:chimp_game/alerts.dart';
 import 'logout.dart';
 
 final user = FirebaseAuth.instance.currentUser;
-String? fullName = user?.displayName;
+String? fullName2 = user?.displayName;
 bool isGuest = false;
 
 class ProfilePage extends StatelessWidget {
@@ -113,7 +113,7 @@ class FireBaseAccountProfile extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(fullName!, style: heading2),
+                Text(fullName2!, style: heading2),
                 Text("uid: ${user?.uid}", style: form2),
               ],
             ),
@@ -203,7 +203,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   displayErrorMsg(context, "Nickname cannot be empty!");
                 } else {
                   setState(() {
-                    fullName = _newNickName.text;
+                    fullName2 = _newNickName.text;
                   });
                   await user?.updateDisplayName(_newNickName.text);
 
