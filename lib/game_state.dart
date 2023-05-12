@@ -61,6 +61,7 @@ class GameState {
     //user sequence needs to get reset here too
   }
 
+  //these should have simple names like "level" or "fadeTime"
   int get getCurrentLevel => _currentLevel;
   double get getFadeTime => _fadeTime;
   int get getCurrentLives => _currentLives;
