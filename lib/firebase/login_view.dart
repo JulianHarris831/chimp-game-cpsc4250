@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:chimp_game/home_page.dart';
 import 'package:chimp_game/alerts.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'profile_view.dart';
 
@@ -86,11 +87,7 @@ class _LoginViewState extends State<LoginView> {
                       isGuest = false;
                       fullName2 = user!.displayName;
                     });
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const MyHomePage(pageIndex: 0)));
+                    context.pushReplacementNamed("home_page");
                   } on FirebaseAuthException catch (e) {
                     temp = e.code;
                     if (temp == 'user-not-found') {
@@ -110,8 +107,7 @@ class _LoginViewState extends State<LoginView> {
                   Text("Not registered yet?", style: textButton2),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/register/', (route) => false);
+                      context.pushReplacementNamed("register_view");
                     },
                     child: Text('Click here to register!', style: textButton1),
                   )
@@ -123,11 +119,7 @@ class _LoginViewState extends State<LoginView> {
                   setState(() {
                     isGuest = true;
                   });
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              const MyHomePage(pageIndex: 0)));
+                  context.pushReplacementNamed("home_page");
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(orange),

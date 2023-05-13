@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chimp_game/home_page.dart';
 import 'package:chimp_game/alerts.dart';
+import 'package:go_router/go_router.dart';
 import 'profile_view.dart';
 
 class RegisterView extends StatefulWidget {
@@ -111,11 +112,7 @@ class _RegisterViewState extends State<RegisterView> {
                         fullName2 = fullName;
                       });
 
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const MyHomePage(pageIndex: 0)));
+                      context.pushReplacementNamed("home_page");
                     } on FirebaseAuthException catch (e) {
                       setState(() {
                         temp = e.code;
@@ -140,8 +137,7 @@ class _RegisterViewState extends State<RegisterView> {
                   Text("Already have an account?", style: textButton2),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context)
-                          .pushNamedAndRemoveUntil('/login/', (route) => false);
+                      context.pushReplacementNamed("login_view");
                     },
                     child: Text('Click here to login!', style: textButton1),
                   )
@@ -153,11 +149,7 @@ class _RegisterViewState extends State<RegisterView> {
                   setState(() {
                     isGuest = true;
                   });
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              const MyHomePage(pageIndex: 0)));
+                  context.pushReplacementNamed("home_page");
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(orange),

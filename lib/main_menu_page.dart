@@ -1,6 +1,7 @@
 import 'package:chimp_game/difficulty_page.dart';
 import 'package:chimp_game/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MainMenuPage extends StatefulWidget {
   const MainMenuPage({super.key});
@@ -22,8 +23,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
               SizedBox(height: large * 2),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const DifficultyPage()));
+                  context.pushNamed("difficulty_page");
                 },
                 style: ButtonStyle(
                   minimumSize:

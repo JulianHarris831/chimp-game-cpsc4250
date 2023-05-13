@@ -8,16 +8,16 @@ import 'package:provider/provider.dart';
 import 'main_menu_page.dart';
 import 'game_state_view_model.dart';
 
+bool autoLogin = false;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  bool autoLogin = false;
   if (await isAutoLogin()) {
     autoLogin = true;
   }
-  runApp(LoginOrRegister(autoLogin: autoLogin));
-
+  runApp(ChimpGame(autoLogin: autoLogin));
 
   //runApp(const MyApp());
 }

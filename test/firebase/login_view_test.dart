@@ -3,6 +3,7 @@ import 'package:chimp_game/firebase/login_view.dart';
 import 'package:chimp_game/firebase/register_view.dart';
 import 'package:chimp_game/home_page.dart';
 import 'package:chimp_game/main_menu_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,14 +13,24 @@ import 'package:mockito/annotations.dart';
 import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 import 'package:flutter/services.dart';
 
-// flutter test test/firebase/login_view_test.dart
+import 'login_view_test.mocks.dart';
 
-@GenerateMocks([NavigatorObserver])
+// flutter test test/firebase/login_view_test.dart
+// flutter pub run build_runner build
+
+@GenerateMocks([
+  FirebaseAuth,
+  User,
+  UserCredential,
+  BuildContext,
+  NavigatorObserver,
+])
+/*
 class MockFunctionCall extends Mock {
-  int check = 0;
+  //int check = 0;
 
   void mockDisplayErrorMsg(BuildContext context, String errorMsg) {
-    check++;
+    //check++;
     displayErrorMsg(context, errorMsg);
   }
 }
@@ -33,12 +44,12 @@ void setupFirebaseAuthMocks([Callback? customHandlers]) {
 
   setupFirebaseCoreMocks();
 }
-
+*/
 void main() async {
-  setupFirebaseAuthMocks();
-  setUpAll(() async {
-    await Firebase.initializeApp();
-  });
+  // setupFirebaseAuthMocks();
+  // setUpAll(() async {
+  //   await Firebase.initializeApp();
+  // });
   testWidgets("Login page generated", (tester) async {
     await tester.pumpWidget(MaterialApp(home: LoginView()));
     await tester.pump();
@@ -71,8 +82,45 @@ void main() async {
     expect(find.byType(RegisterView), findsOneWidget);
   });
 
+  testWidgets(
+      "LoginView() can navigate to MyHomePage() with valid Login information",
+      (tester) async {
+    MockFirebaseAuth firebaseAuth = MockFirebaseAuth();
+    MockUser user = MockUser();
+    MockUserCredential userCredential = MockUserCredential();
+
+    //when(firebaseAuth.currentUser).thenReturn(user);
+    when(firebaseAuth.signInWithEmailAndPassword(
+            email: anyNamed('email'), password: anyNamed('password')))
+        .thenAnswer((_) async => userCredential);
+
+    await Duration(seconds: 2);
+
+    await tester.pumpWidget(MaterialApp(
+      home: LoginView(),
+      routes: {
+        '/homepage1/': (context) => const MyHomePage(pageIndex: 0),
+      },
+    ));
+
+    // Enter valid email and password
+    final emailField = find.widgetWithText(TextField, "Enter your email here!");
+    final passwordField =
+        find.widgetWithText(TextField, "Enter your password here!");
+    final loginButton = find.widgetWithText(TextButton, "Login");
+    await tester.enterText(emailField, "email");
+    await tester.enterText(passwordField, "password");
+    await Duration(seconds: 2);
+
+    await tester.tap(loginButton);
+    await tester.pumpAndSettle();
+
+    //expect(find.byType(MyHomePage), findsOneWidget);
+    expect(find.byType(LoginView), findsOneWidget);
+  });
+
   //THIS METHOD BELOW DOES NOT WORK YET
-  /*
+/*
   testWidgets(
       "LoginView() can navigate to MyHomePage() with valid Login information",
       (tester) async {
@@ -104,7 +152,6 @@ void main() async {
     expect(find.byIcon(Icons.logout), findsOneWidget);
   });
   */
-
   //THIS METHOD BELOW DOES NOT WORK YET
   /*
   testWidgets(

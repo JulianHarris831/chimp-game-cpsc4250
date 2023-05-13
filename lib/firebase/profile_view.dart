@@ -3,6 +3,7 @@ import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chimp_game/alerts.dart';
+import 'package:go_router/go_router.dart';
 import 'logout.dart';
 
 final user = FirebaseAuth.instance.currentUser;
@@ -65,8 +66,7 @@ class GuestProfile extends StatelessWidget {
             Text("Not registered yet?", style: textButton2),
             TextButton(
               onPressed: () {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/register/', (route) => false);
+                context.pushReplacementNamed("register_view");
               },
               child: Text('Click here to register!', style: textButton1),
             )
@@ -78,8 +78,7 @@ class GuestProfile extends StatelessWidget {
             Text("Already have an account?", style: textButton2),
             TextButton(
               onPressed: () {
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/login/', (route) => false);
+                context.pushReplacementNamed("login_view");
               },
               child: Text('Click here to login!', style: textButton1),
             )
