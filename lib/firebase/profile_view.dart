@@ -6,22 +6,23 @@ import 'package:chimp_game/alerts.dart';
 import 'package:go_router/go_router.dart';
 import 'logout.dart';
 
-final user = FirebaseAuth.instance.currentUser;
-String? fullName2 = user?.displayName;
+// final user = FirebaseAuth.instance.currentUser;
+// String? fullName2 = user?.displayName;
 bool isGuest = false;
 
 class ProfilePage extends StatelessWidget {
-  final user = FirebaseAuth.instance.currentUser;
-  ProfilePage({super.key});
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(medium),
         child: SafeArea(
-          child:
-              isGuest ? const GuestProfile() : const FireBaseAccountProfile(),
+          child: isGuest
+              ? const GuestProfile()
+              : FireBaseAccountProfile(user: user!),
         ),
       ),
     );
@@ -89,8 +90,18 @@ class GuestProfile extends StatelessWidget {
   }
 }
 
-class FireBaseAccountProfile extends StatelessWidget {
-  const FireBaseAccountProfile({super.key});
+class FireBaseAccountProfile extends StatefulWidget {
+  FireBaseAccountProfile({super.key, required this.user});
+  User user;
+
+  @override
+  State<FireBaseAccountProfile> createState() => _FireBaseAccountProfileState();
+}
+
+class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
+  void refreshPage() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,18 +123,15 @@ class FireBaseAccountProfile extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(fullName2!, style: heading2),
-                Text("uid: ${user?.uid}", style: form2),
+                Text(widget.user.displayName!, style: heading2),
+                Text("uid: ${widget.user.uid}", style: form2),
               ],
             ),
             SizedBox(width: xsmall),
             IconButton(
               icon: Icon(Icons.settings, color: grey, size: 28),
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProfileEditPage()));
+                context.pushNamed("profile_edit");
               },
             ),
           ],
@@ -131,7 +139,7 @@ class FireBaseAccountProfile extends StatelessWidget {
         Divider(height: large, color: Colors.black),
         Container(
           alignment: Alignment.centerLeft,
-          child: Text("Email:   ${user?.email}", style: form1),
+          child: Text("Email:   ${widget.user.email}", style: form1),
         ),
         SizedBox(height: small),
         Container(
@@ -149,7 +157,9 @@ class FireBaseAccountProfile extends StatelessWidget {
           child: Text("Leaderboard Rank:   not set yet", style: form1),
         ),
         SizedBox(height: small),
-        const Logout()
+        Logout(),
+        SizedBox(height: small),
+        RefreshProfilePage(refreshPage: refreshPage)
       ],
     );
   }
@@ -201,21 +211,38 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 if (_newNickName == null || _newNickName.text.isEmpty) {
                   displayErrorMsg(context, "Nickname cannot be empty!");
                 } else {
-                  setState(() {
-                    fullName2 = _newNickName.text;
-                  });
                   await user?.updateDisplayName(_newNickName.text);
 
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const MyHomePage(pageIndex: 2)),
-                  );
+                  int i = 2;
+                  context.pushReplacementNamed("home_page",
+                      pathParameters: {'index': i.toString()});
                 }
               },
             )
           ]),
         ),
+      ),
+    );
+  }
+}
+
+class RefreshProfilePage extends StatelessWidget {
+  RefreshProfilePage({super.key, required this.refreshPage});
+  Function refreshPage;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {},
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Name not updated?", style: textButton2),
+          TextButton(
+            onPressed: () => refreshPage,
+            child: Text('Click here to refresh!', style: textButton1),
+          )
+        ],
       ),
     );
   }

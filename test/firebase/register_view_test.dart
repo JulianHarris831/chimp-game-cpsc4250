@@ -25,6 +25,10 @@ void setupFirebaseAuthMocks([Callback? customHandlers]) {
 }
 
 void main() async {
+  setupFirebaseAuthMocks();
+  setUpAll(() async {
+    await Firebase.initializeApp();
+  });
   testWidgets("Register page generated", (tester) async {
     await tester.pumpWidget(MaterialApp(home: RegisterView()));
     await tester.pump();

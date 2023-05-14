@@ -1,4 +1,5 @@
 import 'package:chimp_game/difficulty_page.dart';
+import 'package:chimp_game/firebase/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,14 +29,22 @@ final router = GoRouter(initialLocation: "/login_or_register", routes: [
     builder: (context, state) => const RegisterView(),
   ),
   GoRoute(
-    path: "/home_page",
+    path: "/home_page/:index",
     name: "home_page",
-    builder: (context, state) => const MyHomePage(pageIndex: 0),
+    builder: (context, state) {
+      final index = int.parse(state.pathParameters['index']!);
+      return MyHomePage(pageIndex: index);
+    },
   ),
   GoRoute(
     path: "/difficulty_page",
     name: "difficulty_page",
     builder: (context, state) => const DifficultyPage(),
+  ),
+  GoRoute(
+    path: "/profile_edit",
+    name: "profile_edit",
+    builder: (context, state) => const ProfileEditPage(),
   ),
 ]);
 

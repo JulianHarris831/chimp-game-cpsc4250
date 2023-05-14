@@ -28,7 +28,6 @@ import 'login_view_test.mocks.dart';
   BuildContext,
   NavigatorObserver,
 ])
-/*
 class MockFunctionCall extends Mock {
   //int check = 0;
 
@@ -47,12 +46,12 @@ void setupFirebaseAuthMocks([Callback? customHandlers]) {
 
   setupFirebaseCoreMocks();
 }
-*/
+
 void main() async {
-  // setupFirebaseAuthMocks();
-  // setUpAll(() async {
-  //   await Firebase.initializeApp();
-  // });
+  setupFirebaseAuthMocks();
+  setUpAll(() async {
+    await Firebase.initializeApp();
+  });
   testWidgets("Login page generated", (tester) async {
     await tester.pumpWidget(MaterialApp(home: LoginView()));
     await tester.pump();
@@ -112,7 +111,7 @@ void main() async {
     await Duration(seconds: 2);
 
     await tester.pumpWidget(MaterialApp(
-      home: LoginView(),
+      home: const LoginView(),
       routes: {
         '/homepage1/': (context) => const MyHomePage(pageIndex: 0),
       },
@@ -123,15 +122,15 @@ void main() async {
     final passwordField =
         find.widgetWithText(TextField, "Enter your password here!");
     final loginButton = find.widgetWithText(TextButton, "Login");
-    await tester.enterText(emailField, "email");
-    await tester.enterText(passwordField, "password");
-    await Duration(seconds: 2);
+    await tester.enterText(emailField, "test1@gmail.com");
+    await tester.enterText(passwordField, "123456");
+    await tester.pump();
 
     await tester.tap(loginButton);
     await tester.pumpAndSettle();
 
-    //expect(find.byType(MyHomePage), findsOneWidget);
-    expect(find.byType(LoginView), findsOneWidget);
+    expect(find.byType(MyHomePage), findsOneWidget);
+    //expect(find.byType(LoginView), findsOneWidget);
   });
 
   //THIS METHOD BELOW DOES NOT WORK YET

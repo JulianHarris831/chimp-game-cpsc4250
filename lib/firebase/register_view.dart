@@ -1,3 +1,4 @@
+import 'package:chimp_game/firebase/user.dart';
 import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class _RegisterViewState extends State<RegisterView> {
   String? temp;
   String? name;
   bool registered = true;
+  final UserAuth _userAuth = UserAuth(FirebaseAuth.instance);
 
   @override
   void initState() {
@@ -47,116 +49,102 @@ class _RegisterViewState extends State<RegisterView> {
             style: heading3,
           ),
           backgroundColor: orange),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(medium),
-          child: Column(
-            children: [
-              TextField(
-                style: form1,
-                controller: _email,
-                enableSuggestions: false,
-                autocorrect: false,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                    hintText: 'Enter your email here!', hintStyle: hint1),
-              ),
-              TextField(
-                style: form1,
-                controller: _password,
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration: InputDecoration(
-                    hintText: 'Enter your password here!', hintStyle: hint1),
-              ),
-              SizedBox(height: large),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text('Profile Information: ', style: heading2),
-              ),
-              SizedBox(height: xsmall),
-              TextField(
-                style: form1,
-                controller: _nickName,
-                maxLength: 12,
-                enableSuggestions: false,
-                autocorrect: false,
-                keyboardType: TextInputType.name,
-                decoration:
-                    InputDecoration(hintText: 'Nickname', hintStyle: hint1),
-              ),
-              SizedBox(height: small),
-              TextButton(
-                onPressed: () async {
-                  if (_nickName == null || _nickName.text.isEmpty) {
-                    displayErrorMsg(context, "Nickname cannot be empty!");
-                  } else {
-                    setState(() {
-                      temp = null;
-                    });
-                    final email = _email.text;
-                    final password = _password.text;
-
-                    try {
-                      final UserCredential = await FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                              email: email, password: password);
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.all(medium),
+            child: Column(
+              children: [
+                TextField(
+                  style: form1,
+                  controller: _email,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                      hintText: 'Enter your email here!', hintStyle: hint1),
+                ),
+                TextField(
+                  style: form1,
+                  controller: _password,
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  decoration: InputDecoration(
+                      hintText: 'Enter your password here!', hintStyle: hint1),
+                ),
+                SizedBox(height: large),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Profile Information: ', style: heading2),
+                ),
+                SizedBox(height: xsmall),
+                TextField(
+                  style: form1,
+                  controller: _nickName,
+                  maxLength: 12,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  keyboardType: TextInputType.name,
+                  decoration:
+                      InputDecoration(hintText: 'Nickname', hintStyle: hint1),
+                ),
+                SizedBox(height: small),
+                TextButton(
+                  onPressed: () async {
+                    if (_nickName == null || _nickName.text.isEmpty) {
+                      displayErrorMsg(context, "Nickname cannot be empty!");
+                    } else {
+                      setState(() {
+                        temp = null;
+                      });
+                      final email = _email.text;
+                      final password = _password.text;
                       String fullName = _nickName.text;
 
-                      final user = FirebaseAuth.instance.currentUser;
-                      await user?.updateDisplayName(fullName);
+                      bool registered = await _userAuth.registerUser(
+                          context, email, password, fullName);
 
-                      setState(() {
-                        isGuest = false;
-                        fullName2 = fullName;
-                      });
+                      if (registered) {
+                        setState(() {
+                          isGuest = false;
+                        });
 
-                      context.pushReplacementNamed("home_page");
-                    } on FirebaseAuthException catch (e) {
-                      setState(() {
-                        temp = e.code;
-                      });
-                      if (temp == 'email-already-in-use') {
-                        displayErrorMsg(context, 'Email already in use!');
-                      } else if (temp == 'weak-password') {
-                        displayErrorMsg(context, 'Weak password!');
-                      } else if (temp == 'invalid-email') {
-                        displayErrorMsg(context, 'Invalid email!');
-                      } else {
-                        displayErrorMsg(context, e.code);
+                        int i = 0;
+                        context.pushReplacementNamed("home_page",
+                            pathParameters: {'index': i.toString()});
                       }
                     }
-                  }
-                },
-                child: Text('Register', style: textButton1),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Already have an account?", style: textButton2),
-                  TextButton(
-                    onPressed: () {
-                      context.pushReplacementNamed("login_view");
-                    },
-                    child: Text('Click here to login!', style: textButton1),
-                  )
-                ],
-              ),
-              SizedBox(height: large),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    isGuest = true;
-                  });
-                  context.pushReplacementNamed("home_page");
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(orange),
+                  },
+                  child: Text('Register', style: textButton1),
                 ),
-                child: Text('Continue as Guest', style: form1),
-              )
-            ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Already have an account?", style: textButton2),
+                    TextButton(
+                      onPressed: () {
+                        context.pushReplacementNamed("login_view");
+                      },
+                      child: Text('Click here to login!', style: textButton1),
+                    )
+                  ],
+                ),
+                SizedBox(height: large),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      isGuest = true;
+                    });
+                    context.pushReplacementNamed("home_page");
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(orange),
+                  ),
+                  child: Text('Continue as Guest', style: form1),
+                )
+              ],
+            ),
           ),
         ),
       ),

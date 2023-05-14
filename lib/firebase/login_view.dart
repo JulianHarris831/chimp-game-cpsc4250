@@ -1,3 +1,4 @@
+import 'package:chimp_game/main.dart';
 import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,8 +6,10 @@ import 'package:chimp_game/home_page.dart';
 import 'package:chimp_game/alerts.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'profile_view.dart';
+import 'user.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -20,6 +23,7 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   String? temp;
+  final UserAuth _userAuth = UserAuth(FirebaseAuth.instance);
 
   @override
   void initState() {
@@ -70,33 +74,20 @@ class _LoginViewState extends State<LoginView> {
                   temp = null;
                   final email = _email.text;
                   final password = _password.text;
-                  try {
-                    final userCredential = await FirebaseAuth.instance
-                        .signInWithEmailAndPassword(
-                            email: email, password: password);
 
-                    final FlutterSecureStorage _storage =
-                        FlutterSecureStorage();
-                    await _storage.write(key: 'email', value: email);
-                    await _storage.write(key: 'password', value: password);
-                    final SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    await prefs.setInt(
-                        'last_login', DateTime.now().millisecondsSinceEpoch);
+                  bool loggedIn =
+                      await _userAuth.signIn(context, email, password);
+
+                  const Duration(seconds: 2);
+
+                  if (loggedIn) {
                     setState(() {
                       isGuest = false;
-                      fullName2 = user!.displayName;
                     });
-                    context.pushReplacementNamed("home_page");
-                  } on FirebaseAuthException catch (e) {
-                    temp = e.code;
-                    if (temp == 'user-not-found') {
-                      displayErrorMsg(context, 'User not found!');
-                    } else if (e.code == 'wrong-password') {
-                      displayErrorMsg(context, 'Wrong password!');
-                    } else {
-                      displayErrorMsg(context, e.code);
-                    }
+                    //context.pushReplacementNamed("home_page");
+                    int i = 0;
+                    context.pushReplacementNamed("home_page",
+                        pathParameters: {'index': i.toString()});
                   }
                 },
                 child: Text('Login', style: textButton1),

@@ -1,3 +1,4 @@
+import 'package:chimp_game/firebase/user.dart';
 import 'package:chimp_game/main.dart';
 import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,16 +9,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'login_register_page.dart';
 
 class Logout extends StatelessWidget {
-  const Logout({super.key});
+  Logout({super.key});
+
+  final UserAuth _userAuth = UserAuth(FirebaseAuth.instance);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        await FirebaseAuth.instance.signOut();
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setInt('last_login', -1);
         autoLogin = false;
+        await _userAuth.signOut();
         context.pushReplacementNamed("login_or_register");
       },
       style: ButtonStyle(

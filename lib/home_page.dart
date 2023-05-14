@@ -47,7 +47,9 @@ class _MyHomePageState extends State<MyHomePage> {
             elevation: 0,
             type: BottomNavigationBarType.fixed,
             currentIndex: selectedIndex,
-            onTap: (value) { setState(() => selectedIndex = value); },
+            onTap: (value) {
+              setState(() => selectedIndex = value);
+            },
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
