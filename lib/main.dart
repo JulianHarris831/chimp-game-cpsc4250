@@ -21,21 +21,3 @@ void main() async {
 
   //runApp(const MyApp());
 }
-
-
-/* FOR TESTING WITHOUT FIREBASE, USE THIS MYAPP
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => GameStateViewModel(),
-      child: MaterialApp(
-        title: 'Chimp Game',
-        home: const MainMenuPage(),
-      ),
-    );
-  }
-}
- */
