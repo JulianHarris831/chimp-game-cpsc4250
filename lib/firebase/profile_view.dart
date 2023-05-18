@@ -1,4 +1,3 @@
-import 'package:chimp_game/home_page.dart';
 import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +5,6 @@ import 'package:chimp_game/alerts.dart';
 import 'package:go_router/go_router.dart';
 import 'logout.dart';
 
-// final user = FirebaseAuth.instance.currentUser;
-// String? fullName2 = user?.displayName;
 bool isGuest = false;
 
 class ProfilePage extends StatelessWidget {

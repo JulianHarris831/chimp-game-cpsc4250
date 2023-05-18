@@ -1,4 +1,5 @@
 import 'package:chimp_game/firebase/profile_view.dart';
+import 'package:chimp_game/leaderboard/leaderboard_page.dart';
 import 'package:flutter/material.dart';
 import 'main_menu_page.dart';
 
@@ -27,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
         page = const MainMenuPage();
         break;
       case 1:
-        page = const Placeholder();
+        page = const LeaderboardPage();
         break;
       case 2:
         page = ProfilePage();

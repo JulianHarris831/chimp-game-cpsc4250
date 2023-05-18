@@ -9,7 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'profile_view.dart';
-import 'user.dart';
+import 'user_auth.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});

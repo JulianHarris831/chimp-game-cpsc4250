@@ -25,7 +25,6 @@ import 'login_view_test.mocks.dart';
   FirebaseAuth,
   User,
   UserCredential,
-  BuildContext,
   NavigatorObserver,
 ])
 class MockFunctionCall extends Mock {

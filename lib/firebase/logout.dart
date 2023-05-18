@@ -1,4 +1,4 @@
-import 'package:chimp_game/firebase/user.dart';
+import 'package:chimp_game/firebase/user_auth.dart';
 import 'package:chimp_game/main.dart';
 import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';

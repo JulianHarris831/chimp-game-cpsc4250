@@ -1,4 +1,6 @@
+import 'package:chimp_game/database/database.dart';
 import 'package:chimp_game/difficulty_page.dart';
+import 'package:chimp_game/firebase/player_view_model.dart';
 import 'package:chimp_game/firebase/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -49,13 +51,21 @@ final router = GoRouter(initialLocation: "/login_or_register", routes: [
 ]);
 
 class ChimpGame extends StatelessWidget {
-  const ChimpGame({super.key, required this.autoLogin});
+  const ChimpGame({super.key, required this.autoLogin, required this.database});
   final bool autoLogin;
+  final PlayerDatabase database;
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => GameStateViewModel(),
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => GameStateViewModel(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => PlayerViewModel(database),
+          )
+        ],
         child: MaterialApp.router(
           title: 'Chimp Game',
           debugShowCheckedModeBanner: false,

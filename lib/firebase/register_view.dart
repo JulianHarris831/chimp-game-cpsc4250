@@ -1,10 +1,13 @@
-import 'package:chimp_game/firebase/user.dart';
+import 'package:chimp_game/firebase/player_account.dart';
+import 'package:chimp_game/firebase/player_view_model.dart';
+import 'package:chimp_game/firebase/user_auth.dart';
 import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chimp_game/home_page.dart';
 import 'package:chimp_game/alerts.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'profile_view.dart';
 
 class RegisterView extends StatefulWidget {
@@ -42,6 +45,7 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
+    final playerViewModel = context.watch<PlayerViewModel>();
     return Scaffold(
       appBar: AppBar(
           title: Text(
@@ -109,6 +113,11 @@ class _RegisterViewState extends State<RegisterView> {
                         setState(() {
                           isGuest = false;
                         });
+
+                        const Duration(seconds: 2);
+                        User? user = FirebaseAuth.instance.currentUser;
+                        playerViewModel
+                            .addPlayer(Player(user!.uid, 0, fullName));
 
                         int i = 0;
                         context.pushReplacementNamed("home_page",
