@@ -53,10 +53,7 @@ class DifficultyPage extends StatelessWidget {
               width: 300.0,
               height: 50.0,
               child: ElevatedButton.icon(
-                onPressed: () {
-                  //call viewModel, set to 'medium'
-                  //call game_page (after difficulty set)
-                }, //navigation happens here!
+                onPressed: () { _onDifficultyChosen(context, "Medium"); },
                 icon: const Icon(
                   Icons.directions_bike,
                   size: 24.0,
@@ -73,7 +70,7 @@ class DifficultyPage extends StatelessWidget {
               width: 300.0,
               height: 50.0,
               child: ElevatedButton.icon(
-                onPressed: () {}, //navigation happens here!
+                onPressed: () { _onDifficultyChosen(context, "Hard"); },
                 icon: const Icon(
                   Icons.directions_car,
                   size: 24.0,
