@@ -31,10 +31,10 @@ displayErrorMsg(BuildContext context, String errorMsg) {
 
 displayGameOver(BuildContext context) async {
   final gameStateViewModel = context.read<GameStateViewModel>();
-  User? user = FirebaseAuth.instance.currentUser;
-  String uid = user!.uid;
+  /*User? user = FirebaseAuth.instance.currentUser;
+  /String uid = user!.uid;
   bool isNewHighscore =
-      await updateHighscoreByID(uid, gameStateViewModel.scores);
+      await updateHighscoreByID(uid, gameStateViewModel.scores);*/
   Alert(
     context: context,
     content: Column(
@@ -43,7 +43,7 @@ displayGameOver(BuildContext context) async {
             style: heading2, textAlign: TextAlign.center),
         SizedBox(height: medium),
         Text(
-          'Final Score: ${gameStateViewModel.scores}${isNewHighscore ? "\nCongratulations for new high score!" : ""}',
+          'Final Score: ${gameStateViewModel.scores}',//${isNewHighscore ? "\nCongratulations for new high score!" : ""}',
           style: heading3,
           textAlign: TextAlign.center,
         )
