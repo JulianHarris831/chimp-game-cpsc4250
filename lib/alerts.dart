@@ -1,6 +1,7 @@
 import 'package:chimp_game/leaderboard/update_firestore_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:provider/provider.dart';
 import 'home_page.dart';
@@ -32,11 +33,12 @@ displayErrorMsg(BuildContext context, String errorMsg) {
 displayGameOver(BuildContext context) async {
   final gameStateViewModel = context.read<GameStateViewModel>();
   /*User? user = FirebaseAuth.instance.currentUser;
-  /String uid = user!.uid;
+  String uid = user!.uid;
   bool isNewHighscore =
       await updateHighscoreByID(uid, gameStateViewModel.scores);*/
   Alert(
     context: context,
+    style: const AlertStyle(isCloseButton: false, isOverlayTapDismiss: false, buttonsDirection: ButtonsDirection.column),
     content: Column(
       children: [
         Text(gameStateViewModel.level,
@@ -50,7 +52,7 @@ displayGameOver(BuildContext context) async {
       ],
     ),
     buttons: [
-      /*DialogButton(
+      DialogButton(
         onPressed: () {
           //save screenshot of game result to photo gallery (milestone 2)
         },
@@ -63,14 +65,15 @@ displayGameOver(BuildContext context) async {
       DialogButton(
         onPressed: () {
           Navigator.of(context, rootNavigator: true).pop();
-          Navigator.pushReplacement(context, MaterialPageRoute(
-              builder: (context) => const MyHomePage(pageIndex: 1)));
+          context.goNamed('leaderboard_page');
+          /*Navigator.pushReplacement(context, MaterialPageRoute(
+              builder: (context) => const MyHomePage(pageIndex: 1)));*/
         },
         color: Colors.blue,
         child: const Text('View Leaderboard',
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
-      ),*/
+      ),
       DialogButton(
         onPressed: () {
           Navigator.of(context, rootNavigator: true).pop();
@@ -85,10 +88,11 @@ displayGameOver(BuildContext context) async {
       DialogButton(
         onPressed: () {
           Navigator.of(context, rootNavigator: true).pop();
-          Navigator.pushReplacement(
+          context.goNamed('home_page', pathParameters: {'index': 0.toString()});
+          /*Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => const MyHomePage(pageIndex: 0)));
+                  builder: (context) => const MyHomePage(pageIndex: 0)));*/
         },
         color: Colors.blue,
         child: const Text(

@@ -37,6 +37,11 @@ final router = GoRouter(initialLocation: "/login_or_register", routes: [
     },
   ),
   GoRoute(
+    path: "/leaderboard_page",
+    name: "leaderboard_page",
+    builder: (context, state) => const MyHomePage(pageIndex: 1),
+  ),
+  GoRoute(
     path: "/difficulty_page",
     name: "difficulty_page",
     builder: (context, state) => const DifficultyPage(),
