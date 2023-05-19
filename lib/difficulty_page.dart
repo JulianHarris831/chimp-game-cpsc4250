@@ -34,7 +34,7 @@ class DifficultyPage extends StatelessWidget {
           children: [
             SizedBox(
               width: 300.0,
-              height: 50.0,
+              height: 100.0,
               child: ElevatedButton.icon( //focus on implementing 3x3 game first
                   onPressed: () { _onDifficultyChosen(context, "Easy"); },
                   icon: const Icon(
@@ -51,7 +51,7 @@ class DifficultyPage extends StatelessWidget {
             const SizedBox(height:30),
             SizedBox(
               width: 300.0,
-              height: 50.0,
+              height: 100.0,
               child: ElevatedButton.icon(
                 onPressed: () { _onDifficultyChosen(context, "Medium"); },
                 icon: const Icon(
@@ -68,7 +68,7 @@ class DifficultyPage extends StatelessWidget {
             const SizedBox(height:30),
             SizedBox(
               width: 300.0,
-              height: 50.0,
+              height: 100.0,
               child: ElevatedButton.icon(
                 onPressed: () { _onDifficultyChosen(context, "Hard"); },
                 icon: const Icon(
