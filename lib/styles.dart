@@ -9,6 +9,9 @@ var orange = Colors.orange;
 var blue = Colors.blue;
 
 // TextStyles
+TextStyle heading0 = GoogleFonts.poppins(
+    fontSize: 12, fontWeight: FontWeight.bold, color: black);
+
 TextStyle heading1 = GoogleFonts.poppins(
     fontSize: 15, fontWeight: FontWeight.bold, color: black);
 
@@ -38,6 +41,7 @@ TextStyle textButton2 = GoogleFonts.poppins(fontSize: 12, color: blue);
 
 TextStyle form1 = GoogleFonts.poppins(fontSize: 15, color: black);
 TextStyle form2 = GoogleFonts.poppins(fontSize: 10, color: black);
+TextStyle form3 = GoogleFonts.poppins(fontSize: 8, color: black);
 
 // Gap
 var large = 50.0;

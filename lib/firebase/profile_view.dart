@@ -1,4 +1,6 @@
+import 'package:chimp_game/leaderboard/update_firestore_data.dart';
 import 'package:chimp_game/styles.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chimp_game/alerts.dart';
@@ -96,68 +98,103 @@ class FireBaseAccountProfile extends StatefulWidget {
 }
 
 class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
+  CollectionReference playersCollection =
+      FirebaseFirestore.instance.collection('Players');
+  late DocumentReference playerDocRef;
+
+  Future<int?> getPlayerHighscore(String playerId) async {
+    try {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('Players')
+          .doc(playerId)
+          .get();
+
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+      int? highscore = data['highscore'] as int?;
+      return highscore;
+    } catch (error) {
+      print('Error retrieving player highscore: $error');
+      return null;
+    }
+  }
+
   void refreshPage() {
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              height: large,
-              width: large,
-              decoration: BoxDecoration(
-                  color: black,
-                  borderRadius: BorderRadius.circular(100),
-                  image: const DecorationImage(
-                      image: AssetImage('assets/images/profile.png'))),
-            ),
-            SizedBox(width: xsmall),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(widget.user.displayName!, style: heading2),
-                Text("uid: ${widget.user.uid}", style: form2),
-              ],
-            ),
-            SizedBox(width: xsmall),
-            IconButton(
-              icon: Icon(Icons.settings, color: grey, size: 28),
-              onPressed: () {
-                context.pushNamed("profile_edit");
-              },
-            ),
-          ],
-        ),
-        Divider(height: large, color: Colors.black),
-        Container(
-          alignment: Alignment.centerLeft,
-          child: Text("Email:   ${widget.user.email}", style: form1),
-        ),
-        SizedBox(height: small),
-        Container(
-          alignment: Alignment.centerLeft,
-          child: Text("Highest Score:   not set yet", style: form1),
-        ),
-        SizedBox(height: small),
-        Container(
-          alignment: Alignment.centerLeft,
-          child: Text("Region:   Washington, USA", style: form1),
-        ),
-        SizedBox(height: small),
-        Container(
-          alignment: Alignment.centerLeft,
-          child: Text("Leaderboard Rank:   not set yet", style: form1),
-        ),
-        SizedBox(height: small),
-        Logout(),
-        SizedBox(height: small),
-        RefreshProfilePage(refreshPage: refreshPage)
-      ],
+    playerDocRef = playersCollection.doc(widget.user.uid);
+    return StreamBuilder<DocumentSnapshot>(
+      stream: playerDocRef.snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error loading data: ${snapshot.error}');
+        } else {
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
+          int highscore = data['highscore'] as int;
+
+          return Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    height: large,
+                    width: large,
+                    decoration: BoxDecoration(
+                        color: black,
+                        borderRadius: BorderRadius.circular(100),
+                        image: const DecorationImage(
+                            image: AssetImage('assets/images/profile.png'))),
+                  ),
+                  SizedBox(width: xsmall),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.user.displayName!, style: heading2),
+                      Text("uid: ${widget.user.uid}", style: form3),
+                    ],
+                  ),
+                  SizedBox(width: xsmall),
+                  IconButton(
+                    icon: Icon(Icons.settings, color: grey, size: 28),
+                    onPressed: () {
+                      context.pushNamed("profile_edit");
+                    },
+                  ),
+                ],
+              ),
+              Divider(height: large, color: Colors.black),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text("Email:   ${widget.user.email}", style: form1),
+              ),
+              SizedBox(height: small),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Highest Score: $highscore",
+                  style: form1,
+                ),
+              ),
+              SizedBox(height: small),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text("Region:   Washington, USA", style: form1),
+              ),
+              SizedBox(height: small),
+              Logout(),
+              SizedBox(height: small),
+              RefreshProfilePage(refreshPage: refreshPage)
+            ],
+          );
+        }
+      },
     );
   }
 }
@@ -208,8 +245,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 if (_newNickName == null || _newNickName.text.isEmpty) {
                   displayErrorMsg(context, "Nickname cannot be empty!");
                 } else {
-                  await user?.updateDisplayName(_newNickName.text);
-
+                  await user!.updateDisplayName(_newNickName.text);
+                  updateNicknameByID(user!.uid, _newNickName.text);
                   int i = 2;
                   context.pushReplacementNamed("home_page",
                       pathParameters: {'index': i.toString()});

@@ -1,13 +1,10 @@
-import 'package:chimp_game/firebase/player_account.dart';
-import 'package:chimp_game/firebase/player_view_model.dart';
 import 'package:chimp_game/firebase/user_auth.dart';
 import 'package:chimp_game/styles.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:chimp_game/home_page.dart';
 import 'package:chimp_game/alerts.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'profile_view.dart';
 
 class RegisterView extends StatefulWidget {
@@ -26,6 +23,22 @@ class _RegisterViewState extends State<RegisterView> {
   String? name;
   bool registered = true;
   final UserAuth _userAuth = UserAuth(FirebaseAuth.instance);
+  CollectionReference playersCollection =
+      FirebaseFirestore.instance.collection('Players');
+
+  void addUserWithCustomID(String id, String nickname, String email,
+      String password, int highscore) {
+    playersCollection.doc(id).set({
+      'nickname': nickname,
+      'email': email,
+      'password': password,
+      'highscore': highscore,
+    }).then((value) {
+      print('User added successfully!');
+    }).catchError((error) {
+      print('Failed to add user: $error');
+    });
+  }
 
   @override
   void initState() {
@@ -45,7 +58,6 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    final playerViewModel = context.watch<PlayerViewModel>();
     return Scaffold(
       appBar: AppBar(
           title: Text(
@@ -104,20 +116,21 @@ class _RegisterViewState extends State<RegisterView> {
                       });
                       final email = _email.text;
                       final password = _password.text;
-                      String fullName = _nickName.text;
+                      String nickName = _nickName.text;
 
                       bool registered = await _userAuth.registerUser(
-                          context, email, password, fullName);
+                          context, email, password, nickName);
 
                       if (registered) {
                         setState(() {
                           isGuest = false;
                         });
 
-                        const Duration(seconds: 2);
+                        const Duration(seconds: 1);
                         User? user = FirebaseAuth.instance.currentUser;
-                        playerViewModel
-                            .addPlayer(Player(user!.uid, 0, fullName));
+
+                        addUserWithCustomID(
+                            user!.uid, nickName, email, password, 0);
 
                         int i = 0;
                         context.pushReplacementNamed("home_page",
@@ -145,7 +158,9 @@ class _RegisterViewState extends State<RegisterView> {
                     setState(() {
                       isGuest = true;
                     });
-                    context.pushReplacementNamed("home_page");
+                    int i = 0;
+                    context.pushReplacementNamed("home_page",
+                        pathParameters: {'index': i.toString()});
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(orange),

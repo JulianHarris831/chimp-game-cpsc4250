@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
         page = const MainMenuPage();
         break;
       case 1:
-        page = const LeaderboardPage();
+        page = LeaderboardPage();
         break;
       case 2:
         page = ProfilePage();

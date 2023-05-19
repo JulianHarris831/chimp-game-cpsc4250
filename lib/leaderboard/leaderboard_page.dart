@@ -1,8 +1,8 @@
-import 'package:chimp_game/firebase/player_view_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../firebase/player_account.dart';
+import 'player_account.dart';
 import '../styles.dart';
 
 class LeaderboardPage extends StatelessWidget {
@@ -10,8 +10,6 @@ class LeaderboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final playerViewModel = context.watch<PlayerViewModel>();
-    playerViewModel.loadPlayers();
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -30,13 +28,132 @@ class LeaderboardPage extends StatelessWidget {
                 children: [
                   const LeaderboardHeading(),
                   SizedBox(height: small),
-                  PlayersList(playerViewModel: playerViewModel)
+                  const FirestoreLeaderboard()
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class FirestoreLeaderboard extends StatefulWidget {
+  const FirestoreLeaderboard({Key? key}) : super(key: key);
+
+  @override
+  _FirestoreLeaderboardState createState() => _FirestoreLeaderboardState();
+}
+
+class _FirestoreLeaderboardState extends State<FirestoreLeaderboard> {
+  CollectionReference playersCollection =
+      FirebaseFirestore.instance.collection('Players');
+  List<Player> players = [];
+
+  void loadPlayers(AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+    snapshot.data!.docs.forEach((document) {
+      String playerId = document.id;
+      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+      String nickname = data['nickname'] as String;
+      int highScore = data['highscore'] as int;
+      Player player = Player(playerId, highScore, nickname);
+      players.add(player);
+    });
+
+    sortPlayersByHighScoreAndNickname();
+  }
+
+  void sortPlayersByHighScoreAndNickname() {
+    players.sort((a, b) {
+      int scoreComparison = b.highScore.compareTo(a.highScore);
+      if (scoreComparison != 0) {
+        return scoreComparison;
+      } else {
+        return a.nickname.compareTo(b.nickname);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: playersCollection.snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Error loading data: ${snapshot.error}');
+        } else {
+          loadPlayers(snapshot);
+          return Column(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height - 255,
+                width: 500,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(255, 255, 255, 0.7),
+                  borderRadius: BorderRadius.circular(28),
+                ),
+                child: ListView(
+                  children: [
+                    SizedBox(height: small),
+                    const ListHeader(),
+                    Divider(color: black, height: small, thickness: 1),
+                    for (int i = 0; i < players.length; i++)
+                      Column(
+                        children: [
+                          PlayerDisplay(
+                            player: players[i],
+                            index: i,
+                          ),
+                          SizedBox(height: xsmall / 2)
+                        ],
+                      )
+                  ],
+                ),
+              ),
+              Text(
+                'Players count: ${snapshot.data!.docs.length}',
+                style: heading0,
+              ),
+            ],
+          );
+        }
+      },
+    );
+  }
+}
+
+class PlayerDisplay extends StatelessWidget {
+  PlayerDisplay({
+    super.key,
+    required this.player,
+    required this.index,
+  });
+
+  Player player;
+  int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Container(
+          width: 50,
+          child: Text((index + 1).toString(), style: heading0),
+        ),
+        Container(
+          width: 130,
+          child: Text(player.nickname, style: heading0),
+        ),
+        Container(
+          width: 90,
+          child: Text(player.highScore.toString(), style: heading0),
+        ),
+      ],
     );
   }
 }
@@ -58,47 +175,6 @@ class LeaderboardHeading extends StatelessWidget {
   }
 }
 
-class PlayersList extends StatefulWidget {
-  const PlayersList({super.key, required this.playerViewModel});
-  final PlayerViewModel playerViewModel;
-
-  @override
-  State<PlayersList> createState() => _PlayersListState();
-}
-
-class _PlayersListState extends State<PlayersList> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: MediaQuery.of(context).size.height - 255,
-          width: 500,
-          decoration: BoxDecoration(
-            color: Color.fromRGBO(255, 255, 255, 0.7),
-            borderRadius: BorderRadius.circular(28),
-          ),
-          child: Padding(
-            padding:
-                EdgeInsets.only(left: small, right: small, top: xsmall / 2),
-            child: ListView(
-              children: [
-                SizedBox(height: small),
-                const ListHeader(),
-                SizedBox(height: small),
-                for (int i = 0; i < widget.playerViewModel.playerCount; i++)
-                  PlayerDisplay(
-                      index: i,
-                      player: widget.playerViewModel.getPlayerAtIndex(i))
-              ],
-            ),
-          ),
-        )
-      ],
-    );
-  }
-}
-
 class ListHeader extends StatelessWidget {
   const ListHeader({super.key});
 
@@ -110,55 +186,15 @@ class ListHeader extends StatelessWidget {
       children: [
         Container(
           width: 50,
-          child: Text("Rank", style: heading1),
+          child: Text("Rank", style: heading0),
         ),
         Container(
-          width: 150,
-          child: Text("Nickname", style: heading1),
+          width: 130,
+          child: Text("Nickname", style: heading0),
         ),
         Container(
-          width: 100,
-          child: Text("Highscore", style: heading1),
-        ),
-      ],
-    );
-    ;
-  }
-}
-
-class PlayerDisplay extends StatelessWidget {
-  const PlayerDisplay({super.key, required this.index, required this.player});
-  final int index;
-  final Player player;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Container(
-          width: 50,
-          child: Text(
-            (index + 1).toString(),
-            style: heading1,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Container(
-          width: 150,
-          child: Text(
-            player.nickname,
-            style: heading1,
-          ),
-        ),
-        Container(
-          width: 100,
-          child: Text(
-            player.highScore.toString(),
-            style: heading1,
-            textAlign: TextAlign.center,
-          ),
+          width: 90,
+          child: Text("Highscore", style: heading0),
         ),
       ],
     );

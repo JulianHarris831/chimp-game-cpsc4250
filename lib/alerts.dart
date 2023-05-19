@@ -1,3 +1,5 @@
+import 'package:chimp_game/leaderboard/update_firestore_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:provider/provider.dart';
@@ -27,17 +29,24 @@ displayErrorMsg(BuildContext context, String errorMsg) {
       ]).show();
 }
 
-displayGameOver(BuildContext context) {
+displayGameOver(BuildContext context) async {
   final gameStateViewModel = context.read<GameStateViewModel>();
+  User? user = FirebaseAuth.instance.currentUser;
+  String uid = user!.uid;
+  bool isNewHighscore =
+      await updateHighscoreByID(uid, gameStateViewModel.scores);
   Alert(
     context: context,
     content: Column(
       children: [
         Text(gameStateViewModel.level,
-          style: heading2, textAlign: TextAlign.center),
+            style: heading2, textAlign: TextAlign.center),
         SizedBox(height: medium),
-        Text('Final Score: ${gameStateViewModel.scores}',
-          style: heading3, textAlign: TextAlign.center),
+        Text(
+          'Final Score: ${gameStateViewModel.scores}${isNewHighscore ? "\nCongratulations for new high score!" : ""}',
+          style: heading3,
+          textAlign: TextAlign.center,
+        )
       ],
     ),
     buttons: [
@@ -68,18 +77,22 @@ displayGameOver(BuildContext context) {
           gameStateViewModel.reset();
         },
         color: Colors.blue,
-        child: const Text('Retry', // Try Again
+        child: const Text(
+          'Retry', // Try Again
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
       ),
       DialogButton(
         onPressed: () {
           Navigator.of(context, rootNavigator: true).pop();
-          Navigator.pushReplacement(context, MaterialPageRoute(
-              builder: (context) => const MyHomePage(pageIndex: 0)));
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const MyHomePage(pageIndex: 0)));
         },
         color: Colors.blue,
-        child: const Text('Home', // Main Menu
+        child: const Text(
+          'Home', // Main Menu
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
       ),

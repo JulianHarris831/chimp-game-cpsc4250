@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'database/database.dart';
 import 'firebase/login_register_page.dart';
 import 'firebase/auto_login.dart';
 
@@ -14,14 +13,11 @@ bool autoLogin = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  final database = await $FloorPlayerDatabase
-      .databaseBuilder('chimp_game_test_1.db')
-      .build();
 
   if (await isAutoLogin()) {
     autoLogin = true;
   }
-  runApp(ChimpGame(autoLogin: autoLogin, database: database));
+  runApp(ChimpGame(autoLogin: autoLogin));
 
   //runApp(const MyApp());
 }
