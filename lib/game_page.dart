@@ -60,11 +60,10 @@ class _GamePageState extends State<GamePage> {
             ),
             const SizedBox(height: 20),
             GridView.count(
-              shrinkWrap: true, //does nothing?
+              shrinkWrap: true,
               mainAxisSpacing: 10.0,
               crossAxisSpacing: 10.0,
               crossAxisCount: 3,
-              //How can I have a dynamic number of children here? I want 9, 12, and 15.
               children: List.generate(gameStateViewModel.gridSize, (index) {
                 if (index < gameStateViewModel.gridSize) {
                   return ElevatedButton(
@@ -72,8 +71,12 @@ class _GamePageState extends State<GamePage> {
                       gameStateViewModel.onButtonPressed(index);
                       gameStateViewModel.update(context);
                     },
-                    //index should be the position of index in sequence. use a map?
-                    //child: SizedBox(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                      (gameStateViewModel.difficulty == 'easy') ? Colors.green
+                          : (gameStateViewModel.difficulty == 'medium') ? Colors.orangeAccent
+                          : Colors.red //if(gameStateViewModel.difficulty == 'hard')
+                    ),
                     child: (gameStateViewModel.pressed![index]
                       || !gameStateViewModel.started)
                       ? gameStateViewModel.sequence!.containsKey(index)

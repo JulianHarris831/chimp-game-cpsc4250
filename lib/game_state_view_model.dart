@@ -68,6 +68,7 @@ class GameStateViewModel extends ChangeNotifier {
   int get numSequence => _gameState.getNumSequence;
   Map? get sequence => _gameState.getSequence;
   List<bool>? get pressed => _gameState.getPressed;
+  String get difficulty => _gameState.getDifficultyChosen;
 
   void updateLevel() {
     _gameState.nextLevel();
