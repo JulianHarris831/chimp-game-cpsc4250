@@ -14,9 +14,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  /*if (await isAutoLogin()) {
+  if (await isAutoLogin()) {
     autoLogin = true;
-  }*/
+  }
   runApp(ChimpGame(autoLogin: autoLogin));
 
   //runApp(const MyApp());

@@ -1,3 +1,4 @@
+import 'package:chimp_game/firebase/profile_view.dart';
 import 'package:chimp_game/leaderboard/update_firestore_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,22 +31,41 @@ displayErrorMsg(BuildContext context, String errorMsg) {
       ]).show();
 }
 
-displayGameOver(BuildContext context) async {
-  final gameStateViewModel = context.read<GameStateViewModel>();
-  /*User? user = FirebaseAuth.instance.currentUser;
+Future<Widget> checkHighscore(GameStateViewModel gameStateViewModel) async {
+  User? user = FirebaseAuth.instance.currentUser;
   String uid = user!.uid;
   bool isNewHighscore =
-      await updateHighscoreByID(uid, gameStateViewModel.scores);*/
+      await updateHighscoreByID(uid, gameStateViewModel.scores);
+
+  return Text(
+    'Final Score: ${gameStateViewModel.scores}${isNewHighscore ? "\nCongratulations for new high score!" : ""}',
+    style: heading3,
+    textAlign: TextAlign.center,
+  );
+}
+
+displayGameOver(BuildContext context) async {
+  final gameStateViewModel = context.read<GameStateViewModel>();
+  bool isNewHighscore = false;
+  if (!isGuest) {
+    User? user = FirebaseAuth.instance.currentUser;
+    String uid = user!.uid;
+    isNewHighscore = await updateHighscoreByID(uid, gameStateViewModel.scores);
+  }
+  // ignore: use_build_context_synchronously
   Alert(
     context: context,
-    style: const AlertStyle(isCloseButton: false, isOverlayTapDismiss: false, buttonsDirection: ButtonsDirection.column),
+    style: const AlertStyle(
+        isCloseButton: false,
+        isOverlayTapDismiss: false,
+        buttonsDirection: ButtonsDirection.column),
     content: Column(
       children: [
         Text(gameStateViewModel.level,
             style: heading2, textAlign: TextAlign.center),
         SizedBox(height: medium),
         Text(
-          'Final Score: ${gameStateViewModel.scores}',//${isNewHighscore ? "\nCongratulations for new high score!" : ""}',
+          'Final Score: ${gameStateViewModel.scores}${isNewHighscore ? "\nCongratulations for new high score!" : ""}',
           style: heading3,
           textAlign: TextAlign.center,
         )
@@ -57,7 +77,8 @@ displayGameOver(BuildContext context) async {
           //save screenshot of game result to photo gallery (milestone 2)
         },
         color: Colors.blue,
-        child: const Text('Save Game Result',
+        child: const Text(
+          'Save Game Result',
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
       ),
@@ -70,7 +91,8 @@ displayGameOver(BuildContext context) async {
               builder: (context) => const MyHomePage(pageIndex: 1)));*/
         },
         color: Colors.blue,
-        child: const Text('View Leaderboard',
+        child: const Text(
+          'View Leaderboard',
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
       ),
