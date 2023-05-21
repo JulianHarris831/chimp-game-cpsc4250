@@ -29,13 +29,25 @@ void main() {
             body: DifficultyPage(),
           )
         ),
-        /* //need a route for game_age
         GoRoute(
-
+          path: '/game_page',
+          name: 'game_page',
+          builder: (context, _) => const Scaffold(
+            body: Text(destinationChecker),
+          )
         ),
-
-         */
       ],
     );
+
+    await tester.pumpWidget(
+      ChangeNotifierProvider<GameStateViewModel>.value(
+        value: testViewModel,
+        child: MaterialApp.router(
+          routerConfig: router
+        )
+      )
+    );
+
+
   });
 }

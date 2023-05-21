@@ -33,11 +33,7 @@ class _GamePageState extends State<GamePage> {
               icon: const Icon(Icons.home),
               tooltip: 'Home',
               onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context); //pushing back to home
-                //Navigator.pushReplacement(context, MaterialPageRoute(
-                //    builder: (context) => const MyHomePage(pageIndex: 0))
-                //);
+                context.goNamed('home_page', pathParameters: {'index': 0.toString()});
               }
             ),
           ],
