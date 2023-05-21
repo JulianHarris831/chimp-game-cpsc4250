@@ -204,7 +204,7 @@ class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
                 alignment: Alignment.centerLeft,
                 child: Text("Region:   Washington, USA", style: form1),
               ),
-              SizedBox(height: small),
+              SizedBox(height: large),
               Logout(),
               SizedBox(height: small),
               RefreshProfilePage(refreshPage: refreshPage)
@@ -338,6 +338,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             SizedBox(height: large),
             ElevatedButton(
               onPressed: () => showPicker(context),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: blue // Set the background color to blue
+                  ),
               child: const Text('Change Profile Picture'),
             ),
             SizedBox(height: large),
