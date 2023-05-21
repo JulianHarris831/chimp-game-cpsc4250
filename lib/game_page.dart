@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:go_router/go_router.dart';
 
 import 'game_state_view_model.dart';
 import 'home_page.dart';
@@ -32,9 +33,11 @@ class _GamePageState extends State<GamePage> {
               icon: const Icon(Icons.home),
               tooltip: 'Home',
               onPressed: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(
-                    builder: (context) => const MyHomePage(pageIndex: 0))
-                );
+                Navigator.pop(context);
+                Navigator.pop(context); //pushing back to home
+                //Navigator.pushReplacement(context, MaterialPageRoute(
+                //    builder: (context) => const MyHomePage(pageIndex: 0))
+                //);
               }
             ),
           ],

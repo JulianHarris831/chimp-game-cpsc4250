@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'game_page.dart';
 import 'game_state_view_model.dart';
 //need to start using viewModels. we can talk about the best setup,
@@ -18,8 +19,9 @@ class DifficultyPage extends StatelessWidget {
     gameStateViewModel.setDifficulty(difficulty);
     gameStateViewModel.initializeGame();
 
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const GamePage()));
+    context.pushNamed("game_page");
+    //Navigator.push(context,
+    //    MaterialPageRoute(builder: (context) => const GamePage()));
   }
 
   @override
