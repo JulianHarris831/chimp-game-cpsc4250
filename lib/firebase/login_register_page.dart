@@ -47,11 +47,11 @@ final router = GoRouter(initialLocation: "/login_or_register", routes: [
     name: "difficulty_page",
     builder: (context, state) => const DifficultyPage(),
   ),
-  GoRoute(
-    path: "/profile_edit",
-    name: "profile_edit",
-    builder: (context, state) => const ProfileEditPage(),
-  ),
+  // GoRoute(
+  //   path: "/profile_edit",
+  //   name: "profile_edit",
+  //   builder: (context, state) => const ProfileEditPage(),
+  // ),
   GoRoute(
     path: "/game_page",
     name: "game_page",
