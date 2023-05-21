@@ -86,6 +86,7 @@ class _FirestoreLeaderboardState extends State<FirestoreLeaderboard> {
           return Text('Error loading data: ${snapshot.error}');
         } else {
           loadPlayers(snapshot);
+          Duration(seconds: 1);
           return Column(
             children: [
               Container(
