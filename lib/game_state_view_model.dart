@@ -41,7 +41,6 @@ class GameStateViewModel extends ChangeNotifier {
         print('Player taps on the wrong square. Resetting game state..');
       }
     }
-    //also need to verify lost lives and stuff!
     notifyListeners();
   }
 
@@ -61,6 +60,7 @@ class GameStateViewModel extends ChangeNotifier {
   bool get started => _gameState.getStarted;
   String get level => 'Level ${_gameState.getCurrentLevel}';
   double get fadeTime => _gameState.getFadeTime;
+  DateTime get startTime => _gameState.getStartTime;
   int get lives => _gameState.getCurrentLives;
   int get scores => _gameState.getScores;
   int get playerIndex => _gameState.getPlayerSequenceIndex;
@@ -69,6 +69,18 @@ class GameStateViewModel extends ChangeNotifier {
   Map? get sequence => _gameState.getSequence;
   List<bool>? get pressed => _gameState.getPressed;
   String get difficulty => _gameState.getDifficultyChosen;
+  //double get elapsed => _gameState.getStartTime.difference(DateTime.now()).inSeconds.abs().toDouble();
+
+  bool get timeUp {
+    double elapsed = _gameState.getStartTime.difference(DateTime.now()).inSeconds.abs().toDouble();
+    bool timeUp = false;
+    if(elapsed > fadeTime){
+      timeUp = true;
+      //_gameState.setStarted();
+      notifyListeners();
+    }
+    return timeUp;
+  }
 
   void updateLevel() {
     _gameState.nextLevel();

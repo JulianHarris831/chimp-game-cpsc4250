@@ -1,9 +1,10 @@
 class GameState {
   int _currentLevel = 1;
-  double _fadeTime = 3; // sequence fade time; time to memorize (in s)
   int _currentLives = 3;
   int _scores = 0;
   int _playerSequenceIndex = 0; // current index the player needs to taps
+  double _fadeTime = 3; // sequence fade time; time to memorize (in s)
+  DateTime _startTime = DateTime.now(); //compare this to DateTime.now() to see if we are over fade time
 
   // default value: 'easy' difficulty 3x3 GameState
   bool _started = false;
@@ -26,6 +27,7 @@ class GameState {
     _started = false; _currentLevel = 1;
     _fadeTime = 3; _currentLives = 3;
     _scores = 0; _playerSequenceIndex = 0;
+    _startTime = DateTime.now();
     if (_difficultyChosen == 'easy') {
       _gridSize = 9; // 3 x 3
       _maxSequence = 9;
@@ -46,6 +48,7 @@ class GameState {
   void resetGameState() {
     _currentLevel = 1; _fadeTime = 3;
     _currentLives = 3; _scores = 0;
+    _startTime = DateTime.now();
     if(_difficultyChosen == 'easy') {_numSequence = 3;}
     else if(_difficultyChosen == 'medium') {_numSequence = 4;}
     else {_numSequence = 5;}
@@ -64,6 +67,7 @@ class GameState {
   //these should have simple names like "level" or "fadeTime"
   int get getCurrentLevel => _currentLevel;
   double get getFadeTime => _fadeTime;
+  DateTime get getStartTime => _startTime;
   int get getCurrentLives => _currentLives;
   int get getScores => _scores;
   int get getPlayerSequenceIndex => _playerSequenceIndex;
@@ -79,6 +83,7 @@ class GameState {
   void nextLevel() {
     _currentLevel++;
     _fadeTime = _fadeTime * .95; // fadeTime decreases as level increases
+    _startTime = DateTime.now();
     if (_fadeTime < _minFadeTime) _fadeTime = _minFadeTime;
     _numSequence = _numSequence + 1; // sequence to memorize increases w/ level
     if (_numSequence > _maxSequence) _numSequence = _maxSequence;

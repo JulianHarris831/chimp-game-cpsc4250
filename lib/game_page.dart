@@ -81,8 +81,9 @@ class _GamePageState extends State<GamePage> {
                             : (gameStateViewModel.difficulty == 'medium') ? Colors.orangeAccent
                             : Colors.red //if(gameStateViewModel.difficulty == 'hard')
                       ),
-                      child: (gameStateViewModel.pressed![index]
-                        || !gameStateViewModel.started)
+                      //currently this reads, if we haven't pressed this particular square OR if we haven't started, display the number if it's there
+                      //we want to add to the first condition an additional AND to the started check to see the timer!
+                      child: (gameStateViewModel.pressed![index] || (!gameStateViewModel.started && !gameStateViewModel.timeUp))
                         ? gameStateViewModel.sequence!.containsKey(index)
                           ? Text('${gameStateViewModel.sequence![index]}', style: heading5)
                           : const SizedBox()
