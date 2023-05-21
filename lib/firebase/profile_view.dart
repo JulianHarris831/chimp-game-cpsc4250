@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:chimp_game/image_helper.dart';
 import 'package:chimp_game/leaderboard/update_firestore_data.dart';
 import 'package:chimp_game/styles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,9 +8,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chimp_game/alerts.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'logout.dart';
 
 bool isGuest = false;
+final imageHelper = ImageHelper();
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -98,6 +104,8 @@ class FireBaseAccountProfile extends StatefulWidget {
 }
 
 class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
+  File? _profileImage;
+
   CollectionReference playersCollection =
       FirebaseFirestore.instance.collection('Players');
   late DocumentReference playerDocRef;
@@ -116,6 +124,52 @@ class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
     } catch (error) {
       print('Error retrieving player highscore: $error');
       return null;
+    }
+  }
+
+  void showPicker(BuildContext context) {
+    showModalBottomSheet(context: context, builder: (BuildContext buildContext) {
+      return SafeArea(
+        child: SizedBox(
+          height: 150,
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: Text('Choose from Photo Gallery', style: heading2),
+                onTap: () async {
+                  final file = await imageHelper.pickImage();
+                  await _cropImage(file);
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: Text('Take a Picture using Camera', style: heading2),
+                onTap: () async {
+                  final file = await imageHelper.pickImage(source: ImageSource.camera);
+                  await _cropImage(file);
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  _cropImage(XFile? file) async {
+    if (file != null) {
+      final croppedFile = await imageHelper.crop(
+        file: file,
+        cropStyle: CropStyle.circle,
+      );
+      if (croppedFile != null) {
+        setState(() => _profileImage = File(croppedFile.path));
+      }
     }
   }
 
@@ -143,7 +197,7 @@ class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
+                  /*Container(
                     height: large,
                     width: large,
                     decoration: BoxDecoration(
@@ -151,6 +205,17 @@ class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
                         borderRadius: BorderRadius.circular(100),
                         image: const DecorationImage(
                             image: AssetImage('assets/images/profile.png'))),
+                  ),*/
+                  Center(
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.grey[300],
+                        radius: 28,
+                        foregroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
+                        child: Icon(Icons.person_rounded, size: large),
+                      ),
+                    ),
                   ),
                   SizedBox(width: xsmall),
                   Column(
@@ -186,6 +251,11 @@ class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
               Container(
                 alignment: Alignment.centerLeft,
                 child: Text("Region:   Washington, USA", style: form1),
+              ),
+              SizedBox(height: small),
+              ElevatedButton(
+                onPressed: () => showPicker(context),
+                child: const Text('Change Profile Picture'),
               ),
               SizedBox(height: small),
               Logout(),
