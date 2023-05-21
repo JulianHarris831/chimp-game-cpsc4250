@@ -143,7 +143,7 @@ displayGameOver(BuildContext context, ScreenshotController controller) async {
       DialogButton(
         onPressed: () {
           Navigator.of(context, rootNavigator: true).pop();
-          context.pushNamed('leaderboard_page');
+          context.pushReplacementNamed('leaderboard_page');
         },
         color: Colors.orange,
         child: Text('View Leaderboard', style: bold15),
