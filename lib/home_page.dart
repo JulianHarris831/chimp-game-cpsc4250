@@ -28,10 +28,10 @@ class _MyHomePageState extends State<MyHomePage> {
         page = const MainMenuPage();
         break;
       case 1:
-        page = LeaderboardPage();
+        page = const LeaderboardPage();
         break;
       case 2:
-        page = ProfilePage();
+        page = const ProfilePage();
         break;
       default:
         throw UnimplementedError('No widget for $selectedIndex');

@@ -1,4 +1,3 @@
-import 'package:chimp_game/difficulty_page.dart';
 import 'package:chimp_game/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

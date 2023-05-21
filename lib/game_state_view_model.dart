@@ -1,5 +1,6 @@
 import 'package:chimp_game/alerts.dart';
 import 'package:flutter/material.dart';
+import 'package:screenshot/screenshot.dart';
 import 'game_state.dart';
 
 class GameStateViewModel extends ChangeNotifier {
@@ -44,15 +45,14 @@ class GameStateViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void update(BuildContext context) {
+  void update(BuildContext context, ScreenshotController controller) {
     print('player index: $playerIndex; correct sequence required $numSequence');
     if (playerIndex >= numSequence) {
       _gameState.nextLevel();
       _gameState.refreshGameState();
     }
     else if (lives == 0) {
-      displayGameOver(context);
-      // display game over pop-up alert
+      displayGameOver(context, controller);
     }
     notifyListeners();
   }
