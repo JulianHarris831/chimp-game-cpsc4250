@@ -9,6 +9,7 @@ import 'firebase_options.dart';
 import 'login_view.dart';
 import 'register_view.dart';
 import 'package:chimp_game/home_page.dart';
+import 'package:chimp_game/game_page.dart';
 import 'package:chimp_game/game_state_view_model.dart';
 import 'package:go_router/go_router.dart';
 
@@ -51,6 +52,11 @@ final router = GoRouter(initialLocation: "/login_or_register", routes: [
     name: "profile_edit",
     builder: (context, state) => const ProfileEditPage(),
   ),
+  GoRoute(
+    path: "/game_page",
+    name: "game_page",
+    builder: (context, state) => const GamePage(),
+  )
 ]);
 
 class ChimpGame extends StatelessWidget {

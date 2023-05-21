@@ -7,9 +7,6 @@ import 'home_page.dart';
 import 'styles.dart';
 //continue integrating viewModels here!
 
-//TODO: Right now displaying gridView explodes everything, work that out!
-//You've got some decent logic for the sizing though! 
-
 class GamePage extends StatefulWidget {
   const GamePage({Key? key}) : super(key: key);
 
