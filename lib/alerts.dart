@@ -74,14 +74,16 @@ displayGameOver(BuildContext context, ScreenshotController controller) async {
 
   if (!isGuest) {
     User? user = FirebaseAuth.instance.currentUser;
-    String uid = user!.uid;
+    if (user != null) {
+      String uid = user!.uid;
 
-    CollectionReference playersCollection = FirebaseFirestore.instance.collection('Players');
-    DocumentSnapshot documentSnapshot = await playersCollection.doc(uid).get();
-    Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-    previousHighScore = data['highscore'] as int;
+      CollectionReference playersCollection = FirebaseFirestore.instance.collection('Players');
+      DocumentSnapshot documentSnapshot = await playersCollection.doc(uid).get();
+      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+      previousHighScore = data['highscore'] as int;
 
-    isNewHighscore = await updateHighscoreByID(uid, gameStateViewModel.scores);
+      isNewHighscore = await updateHighscoreByID(uid, gameStateViewModel.scores);
+    }
   }
 
   // ignore: use_build_context_synchronously
