@@ -102,7 +102,7 @@ displayGameOver(BuildContext context, ScreenshotController controller) async {
           textAlign: TextAlign.center,
         ),
         Text(
-          'Previous High Score: $previousHighScore',
+          isGuest ? '' : 'Previous High Score: $previousHighScore',
           style: heading1,
           textAlign: TextAlign.center
         ),
