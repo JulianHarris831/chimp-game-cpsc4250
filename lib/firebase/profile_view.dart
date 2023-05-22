@@ -355,25 +355,3 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     );
   }
 }
-
-class RefreshProfilePage extends StatelessWidget {
-  RefreshProfilePage({super.key, required this.refreshPage});
-  Function refreshPage;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {},
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Name not updated?", style: textButton2),
-          TextButton(
-            onPressed: () => refreshPage,
-            child: Text('Click here to refresh!', style: textButton1),
-          )
-        ],
-      ),
-    );
-  }
-}
