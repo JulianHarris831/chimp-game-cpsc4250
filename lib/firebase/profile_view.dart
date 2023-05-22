@@ -107,7 +107,7 @@ class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
   CollectionReference playersCollection =
       FirebaseFirestore.instance.collection('Players');
   late DocumentReference playerDocRef;
-  final UserAuth _userAuth = UserAuth(FirebaseAuth.instance);
+  final UserAuth _userAuth = UserAuth();
   String profilePictureUrl =
       'https://firebasestorage.googleapis.com/v0/b/cpsc4250-game.appspot.com/o/profile_pictures%2Fprofile.png?alt=media&token=c8495e34-f82f-4fa6-a6b1-7b1f3f16a501';
 
@@ -207,7 +207,7 @@ class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
               SizedBox(height: large),
               Logout(),
               SizedBox(height: small),
-              RefreshProfilePage(refreshPage: refreshPage)
+              //RefreshProfilePage(refreshPage: refreshPage)
             ],
           );
         }

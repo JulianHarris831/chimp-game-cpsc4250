@@ -11,7 +11,7 @@ import 'login_register_page.dart';
 class Logout extends StatelessWidget {
   Logout({super.key});
 
-  final UserAuth _userAuth = UserAuth(FirebaseAuth.instance);
+  final UserAuth _userAuth = UserAuth();
 
   @override
   Widget build(BuildContext context) {

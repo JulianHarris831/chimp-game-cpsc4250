@@ -9,13 +9,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserAuth {
-  final FirebaseAuth auth;
+  //final FirebaseAuth auth;
   User? _user;
-  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   final ImagePicker _imagePicker = ImagePicker();
   final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
-  UserAuth(this.auth);
+  UserAuth();
 
   //User get user => _user ?? FirebaseAuth.instance.currentUser!;
 
@@ -76,13 +75,14 @@ class UserAuth {
   Future signOut() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('last_login', -1);
-    auth.signOut();
+    FirebaseAuth.instance.signOut();
     return Future.delayed(const Duration(seconds: 1));
   }
 
   Future<void> saveProfilePicture(
       CroppedFile croppedFile, BuildContext context) async {
     _user = FirebaseAuth.instance.currentUser;
+    final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
     if (_user == null) {
       return;
     }
@@ -114,6 +114,7 @@ class UserAuth {
 
   Future<String> retrieveProfilePicture() async {
     _user = FirebaseAuth.instance.currentUser;
+    final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
     if (_user == null) {
       return " ";
     }

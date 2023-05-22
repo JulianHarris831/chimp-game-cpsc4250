@@ -22,7 +22,7 @@ class _RegisterViewState extends State<RegisterView> {
   String? temp;
   String? name;
   bool registered = true;
-  final UserAuth _userAuth = UserAuth(FirebaseAuth.instance);
+  final UserAuth _userAuth = UserAuth();
   CollectionReference playersCollection =
       FirebaseFirestore.instance.collection('Players');
 

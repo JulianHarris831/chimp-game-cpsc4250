@@ -1,13 +1,7 @@
-import 'package:chimp_game/main.dart';
 import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:chimp_game/home_page.dart';
-import 'package:chimp_game/alerts.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'profile_view.dart';
 import 'user_auth.dart';
 
@@ -23,7 +17,7 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   String? temp;
-  final UserAuth _userAuth = UserAuth(FirebaseAuth.instance);
+  final UserAuth _userAuth = UserAuth();
 
   @override
   void initState() {
@@ -75,7 +69,6 @@ class _LoginViewState extends State<LoginView> {
                     temp = null;
                     final email = _email.text;
                     final password = _password.text;
-
                     bool loggedIn =
                         await _userAuth.signIn(context, email, password);
 
