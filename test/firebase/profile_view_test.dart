@@ -43,8 +43,13 @@ void main() async {
   testWidgets("GuestProfile displayed correctly", (tester) async {
     await tester.pumpWidget(MaterialApp(home: GuestProfile()));
 
-    //expect(find.text("Guest"), findsOneWidget);
+    expect(find.text("Guest"), findsOneWidget);
+    expect(find.byType(Container), findsOneWidget);
+
+    expect(find.text("Not registered yet?"), findsOneWidget);
     expect(find.text('Click here to register!'), findsOneWidget);
+
+    expect(find.text("Already have an account?"), findsOneWidget);
     expect(find.text('Click here to login!'), findsOneWidget);
   });
 
@@ -69,6 +74,7 @@ void main() async {
       ),
     ));
 
+    expect(find.text("Already have an account?"), findsOneWidget);
     expect(find.text('Click here to login!'), findsOneWidget);
     await tester.tap(find.text('Click here to login!'));
     await tester.pumpAndSettle();
@@ -98,6 +104,7 @@ void main() async {
       ),
     ));
 
+    expect(find.text("Not registered yet?"), findsOneWidget);
     expect(find.text('Click here to register!'), findsOneWidget);
     await tester.tap(find.text('Click here to register!'));
     await tester.pumpAndSettle();

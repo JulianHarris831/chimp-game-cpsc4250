@@ -98,7 +98,6 @@ void main() async {
     expect(find.byType(RegisterView), findsOneWidget);
   });
 
-/* todo:
   testWidgets(
       "LoginView() can navigate to MyHomePage() with valid Login information",
       (tester) async {
@@ -135,7 +134,7 @@ void main() async {
     expect(find.byType(MyHomePage), findsOneWidget);
     //expect(find.byType(LoginView), findsOneWidget);
   });
-*/
+
   //THIS METHOD BELOW DOES NOT WORK YET
 /*
   testWidgets(

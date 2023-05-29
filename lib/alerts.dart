@@ -21,7 +21,8 @@ displayErrorMsg(BuildContext context, String errorMsg) {
       content: Column(
         children: [
           SizedBox(height: medium),
-          Text("An error occurred!", style: bold25, textAlign: TextAlign.center),
+          Text("An error occurred!",
+              style: bold25, textAlign: TextAlign.center),
           Text(errorMsg, style: bold25, textAlign: TextAlign.center),
         ],
       ),
@@ -75,14 +76,18 @@ displayGameOver(BuildContext context, ScreenshotController controller) async {
   if (!isGuest) {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      String uid = user!.uid;
+      String uid = user.uid;
 
-      CollectionReference playersCollection = FirebaseFirestore.instance.collection('Players');
-      DocumentSnapshot documentSnapshot = await playersCollection.doc(uid).get();
-      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+      CollectionReference playersCollection =
+          FirebaseFirestore.instance.collection('Players');
+      DocumentSnapshot documentSnapshot =
+          await playersCollection.doc(uid).get();
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
       previousHighScore = data['highscore'] as int;
 
-      isNewHighscore = await updateHighscoreByID(uid, gameStateViewModel.scores);
+      isNewHighscore =
+          await updateHighscoreByID(uid, gameStateViewModel.scores);
     }
   }
 
@@ -103,17 +108,11 @@ displayGameOver(BuildContext context, ScreenshotController controller) async {
           style: heading3,
           textAlign: TextAlign.center,
         ),
-        Text(
-          isGuest ? '' : 'Previous High Score: $previousHighScore',
-          style: heading1,
-          textAlign: TextAlign.center
-        ),
+        Text(isGuest ? '' : 'Previous High Score: $previousHighScore',
+            style: heading1, textAlign: TextAlign.center),
         SizedBox(height: small),
-        Text(
-          isNewHighscore ? "Congratulations for new high score!" : "",
-          style: heading3,
-          textAlign: TextAlign.center
-        )
+        Text(isNewHighscore ? "Congratulations for new high score!" : "",
+            style: heading3, textAlign: TextAlign.center)
       ],
     ),
     buttons: [
@@ -166,7 +165,9 @@ Future<String> _saveImageToGallery(Uint8List bytes) async {
   await [Permission.storage].request();
 
   final time = DateTime.now()
-      .toIso8601String().replaceAll('.', '-').replaceAll(':', '-');
+      .toIso8601String()
+      .replaceAll('.', '-')
+      .replaceAll(':', '-');
   final name = 'screenshot_$time';
   final result = await ImageGallerySaver.saveImage(bytes, name: name);
 
