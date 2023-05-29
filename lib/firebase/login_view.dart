@@ -1,9 +1,30 @@
+import 'package:chimp_game/firebase/register_view.dart';
 import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'animation.dart';
 import 'profile_view.dart';
 import 'user_auth.dart';
+
+class SlidePageRoute<T> extends PageRouteBuilder<T> {
+  final Widget page;
+
+  SlidePageRoute({required this.page})
+      : super(
+          pageBuilder: (_, __, ___) => page,
+          transitionsBuilder:
+              (_, Animation<double> animation, __, Widget child) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(1.0, 0.0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            );
+          },
+        );
+}
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -37,13 +58,18 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('Login', style: heading3), backgroundColor: orange),
+          title: Text('Welcome!', style: heading3), backgroundColor: orange),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.all(medium),
             child: Column(
               children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Login:', style: heading3),
+                ),
+                SizedBox(height: small),
                 TextField(
                   //key: Key("EmailField"),
                   style: form1,
@@ -89,10 +115,12 @@ class _LoginViewState extends State<LoginView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Not registered yet?", style: textButton2),
+                    Text("Don't have an account?", style: textButton2),
                     TextButton(
                       onPressed: () {
-                        context.pushReplacementNamed("register_view");
+                        context.pushNamed("register_view");
+                        // Navigator.of(context)
+                        //     .push(SlidePageRoute(page: RegisterView()));
                       },
                       child:
                           Text('Click here to register!', style: textButton1),

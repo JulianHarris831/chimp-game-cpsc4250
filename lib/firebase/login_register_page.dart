@@ -22,12 +22,38 @@ final router = GoRouter(initialLocation: "/login_or_register", routes: [
   GoRoute(
     path: "/login_view",
     name: "login_view",
-    builder: (context, state) => const LoginView(),
+    pageBuilder: (context, state) {
+      return CustomTransitionPage(
+          transitionDuration: Duration(seconds: 2),
+          child: const LoginView(),
+          transitionsBuilder: ((context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity:
+                  CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+              child: child,
+            );
+          }));
+    },
   ),
   GoRoute(
     path: "/register_view",
     name: "register_view",
-    builder: (context, state) => const RegisterView(),
+    pageBuilder: (context, state) {
+      return CustomTransitionPage(
+        transitionDuration: Duration(seconds: 1),
+        child: const RegisterView(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var tween =
+              Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero);
+          var curveTween = CurveTween(curve: Curves.ease);
+
+          return SlideTransition(
+            position: animation.drive(curveTween).drive(tween),
+            child: child,
+          );
+        },
+      );
+    },
   ),
   GoRoute(
     path: "/home_page/:index",

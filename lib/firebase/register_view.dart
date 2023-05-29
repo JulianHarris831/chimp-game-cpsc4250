@@ -61,8 +61,8 @@ class _RegisterViewState extends State<RegisterView> {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-            'Register',
-            style: heading3,
+            'Back to Login Page',
+            style: heading2,
           ),
           backgroundColor: orange),
       body: SingleChildScrollView(
@@ -71,6 +71,11 @@ class _RegisterViewState extends State<RegisterView> {
             padding: EdgeInsets.all(medium),
             child: Column(
               children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Register:', style: heading3),
+                ),
+                SizedBox(height: small),
                 TextField(
                   style: form1,
                   controller: _email,
@@ -92,7 +97,7 @@ class _RegisterViewState extends State<RegisterView> {
                 SizedBox(height: large),
                 Container(
                   alignment: Alignment.centerLeft,
-                  child: Text('Profile Information: ', style: heading2),
+                  child: Text('Profile Information: ', style: heading1),
                 ),
                 SizedBox(height: xsmall),
                 TextField(
@@ -140,33 +145,18 @@ class _RegisterViewState extends State<RegisterView> {
                   },
                   child: Text('Register', style: textButton1),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Already have an account?", style: textButton2),
-                    TextButton(
-                      onPressed: () {
-                        context.pushReplacementNamed("login_view");
-                      },
-                      child: Text('Click here to login!', style: textButton1),
-                    )
-                  ],
-                ),
-                SizedBox(height: large),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      isGuest = true;
-                    });
-                    int i = 0;
-                    context.pushReplacementNamed("home_page",
-                        pathParameters: {'index': i.toString()});
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(orange),
-                  ),
-                  child: Text('Continue as Guest', style: form1),
-                )
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Text("Already have an account?", style: textButton2),
+                //     TextButton(
+                //       onPressed: () {
+                //         context.pushReplacementNamed("login_view");
+                //       },
+                //       child: Text('Click here to login!', style: textButton1),
+                //     )
+                //   ],
+                // ),
               ],
             ),
           ),

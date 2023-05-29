@@ -67,18 +67,6 @@ class GuestProfile extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Not registered yet?", style: textButton2),
-            TextButton(
-              onPressed: () {
-                context.pushReplacementNamed("register_view");
-              },
-              child: Text('Click here to register!', style: textButton1),
-            )
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
             Text("Already have an account?", style: textButton2),
             TextButton(
               onPressed: () {

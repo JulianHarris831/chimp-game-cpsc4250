@@ -22,7 +22,7 @@ TextStyle heading3 = GoogleFonts.poppins(
     fontSize: 25, fontWeight: FontWeight.bold, color: black);
 
 TextStyle heading4 = GoogleFonts.poppins(
-    fontSize: 40, fontWeight: FontWeight.bold, color: black);
+    fontSize: 30, fontWeight: FontWeight.bold, color: black);
 
 TextStyle heading5 = GoogleFonts.poppins(
     fontSize: 25, fontWeight: FontWeight.bold, color: white);
