@@ -3,7 +3,7 @@ import 'package:chimp_game/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'animation.dart';
+import 'package:flutter/animation.dart';
 import 'profile_view.dart';
 import 'user_auth.dart';
 

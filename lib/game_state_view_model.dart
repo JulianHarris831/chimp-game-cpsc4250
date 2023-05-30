@@ -2,6 +2,7 @@ import 'package:chimp_game/alerts.dart';
 import 'package:flutter/material.dart';
 import 'package:screenshot/screenshot.dart';
 import 'game_state.dart';
+import 'dart:io';
 
 class GameStateViewModel extends ChangeNotifier {
   final _gameState = GameState();
@@ -11,13 +12,26 @@ class GameStateViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> timeUp() async {
+    double elapsed = _gameState.getStartTime.difference(DateTime.now()).inSeconds.abs().toDouble();
+    return elapsed > fadeTime;
+  }
+  void timer() async {
+    if(await (timeUp())){
+      _gameState.setStarted();
+      notifyListeners();
+    }
+  }
+
   void initializeGame() {
     _gameState.initGameState();
+    timer();
     notifyListeners();
   }
 
   void reset() {
     _gameState.resetGameState();
+    timer();
     notifyListeners();
   }
 
@@ -70,17 +84,6 @@ class GameStateViewModel extends ChangeNotifier {
   List<bool>? get pressed => _gameState.getPressed;
   String get difficulty => _gameState.getDifficultyChosen;
   //double get elapsed => _gameState.getStartTime.difference(DateTime.now()).inSeconds.abs().toDouble();
-
-  bool get timeUp {
-    double elapsed = _gameState.getStartTime.difference(DateTime.now()).inSeconds.abs().toDouble();
-    bool timeUp = false;
-    if(elapsed > fadeTime){
-      timeUp = true;
-      //_gameState.setStarted();
-      notifyListeners();
-    }
-    return timeUp;
-  }
 
   void updateLevel() {
     _gameState.nextLevel();

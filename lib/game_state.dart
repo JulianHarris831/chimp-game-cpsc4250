@@ -4,7 +4,7 @@ class GameState {
   int _scores = 0;
   int _playerSequenceIndex = 0; // current index the player needs to taps
   double _fadeTime = 3; // sequence fade time; time to memorize (in s)
-  DateTime _startTime = DateTime.now(); //compare this to DateTime.now() to see if we are over fade time
+  DateTime _startTime = DateTime.now(); //compare this to DateTime.now() to see if we are over fade time in seconds
 
   // default value: 'easy' difficulty 3x3 GameState
   bool _started = false;

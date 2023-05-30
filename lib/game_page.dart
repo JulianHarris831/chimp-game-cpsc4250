@@ -78,6 +78,8 @@ class _GamePageState extends State<GamePage> {
                               : (gameStateViewModel.difficulty == 'medium') ? Colors.orangeAccent
                               : Colors.red //if(gameStateViewModel.difficulty == 'hard')
                         ),
+                        //instead of this timeUp nonsense, just have a future that waits until timeUp
+                        //seconds, then it makes the started bool True, and pumps the widget.
                         child: (gameStateViewModel.pressed![index] || (!gameStateViewModel.started)) //&& !gameStateViewModel.timeUp))
                           ? gameStateViewModel.sequence!.containsKey(index)
                             ? Text('${gameStateViewModel.sequence![index]}', style: heading5)
