@@ -12,12 +12,17 @@ class GameStateViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> timeUp() async {
-    double elapsed = _gameState.getStartTime.difference(DateTime.now()).inSeconds.abs().toDouble();
-    return elapsed > fadeTime;
+  Future<double> pause() async {
+    //double elapsed = _gameState.getStartTime.difference(DateTime.now()).inSeconds.abs().toDouble();
+    final millTime = (fadeTime*1000).round();
+    await Future.delayed(Duration(milliseconds: millTime));
+    return fadeTime;
   }
-  void timer() async {
-    if(await (timeUp())){
+  void timer() async{
+    //UUID is our startTime. This could be improved!
+    final startFade = fadeTime;
+    await pause();
+    if(startFade == fadeTime){
       _gameState.setStarted();
       notifyListeners();
     }
