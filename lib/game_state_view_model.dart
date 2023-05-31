@@ -20,8 +20,9 @@ class GameStateViewModel extends ChangeNotifier {
   }
   void timer() async{
     //UUID is our startTime. This could be improved!
-    final startFade = fadeTime;
+    double startFade = fadeTime; //this needs to be set every time timer is run!
     await pause();
+    //This only seems to run one time. Is fadeTime set one time and just never again?
     if(startFade == fadeTime){
       _gameState.setStarted();
       notifyListeners();
@@ -42,6 +43,7 @@ class GameStateViewModel extends ChangeNotifier {
 
   void refresh() {
     _gameState.refreshGameState();
+    timer();
     notifyListeners();
   }
 
@@ -56,8 +58,8 @@ class GameStateViewModel extends ChangeNotifier {
       }
       else {
         _gameState.removeLife();
-        _gameState.refreshGameState();
-        print('Player taps on the wrong square. Resetting game state..');
+        refresh();
+        print('Player taps on the wrong square. Refreshing game state..');
       }
     }
     notifyListeners();
@@ -67,7 +69,7 @@ class GameStateViewModel extends ChangeNotifier {
     print('player index: $playerIndex; correct sequence required $numSequence');
     if (playerIndex >= numSequence) {
       _gameState.nextLevel();
-      _gameState.refreshGameState();
+      refresh();
     }
     else if (lives == 0) {
       displayGameOver(context, controller);
