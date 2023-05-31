@@ -36,10 +36,12 @@ class GameState {
       _gridSize = 12; // 3 x 4
       _maxSequence = 12;
       _numSequence = 4;
+      _fadeTime = 3.5;
     } else {
       _gridSize = 15; // 3 x 5
       _maxSequence = 15;
       _numSequence = 5;
+      _fadeTime = 4;
     }
     generateRandomSequence();
     setPressed();
