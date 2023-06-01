@@ -135,27 +135,52 @@ class PlayerDisplay extends StatelessWidget {
 
   Player player;
   int index;
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Container(
-          width: 50,
-          child: Text((index + 1).toString(), style: heading0),
+    if (player.nickname == user!.displayName) {
+      return Container(
+        color: blue,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(
+              width: 50,
+              child: Text((index + 1).toString(), style: heading0),
+            ),
+            Container(
+              width: 130,
+              child: Text(player.nickname, style: heading0),
+            ),
+            Container(
+              width: 90,
+              child: Text(player.highScore.toString(), style: heading0),
+            ),
+          ],
         ),
-        Container(
-          width: 130,
-          child: Text(player.nickname, style: heading0),
-        ),
-        Container(
-          width: 90,
-          child: Text(player.highScore.toString(), style: heading0),
-        ),
-      ],
-    );
+      );
+    } else {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            width: 50,
+            child: Text((index + 1).toString(), style: heading0),
+          ),
+          Container(
+            width: 130,
+            child: Text(player.nickname, style: heading0),
+          ),
+          Container(
+            width: 90,
+            child: Text(player.highScore.toString(), style: heading0),
+          ),
+        ],
+      );
+    }
   }
 }
 
