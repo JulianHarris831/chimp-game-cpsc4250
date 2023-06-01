@@ -162,12 +162,28 @@ class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfileEditPage(
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  ProfileEditPage(
                             userAuth: _userAuth,
                             user: widget.user,
                             retrieveProfilePicture: retrieveProfilePicture,
                           ),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            var tween = Tween(
+                                begin: const Offset(1.0, 0.0),
+                                end: Offset.zero);
+                            var curveTween = CurveTween(curve: Curves.ease);
+
+                            return SlideTransition(
+                              position:
+                                  animation.drive(curveTween).drive(tween),
+                              child: child,
+                            );
+                          },
+                          transitionDuration: Duration(seconds: 1),
                         ),
                       );
                     },
@@ -186,11 +202,6 @@ class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
                   "Highest Score: $highscore",
                   style: form1,
                 ),
-              ),
-              SizedBox(height: small),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text("Region:   Washington, USA", style: form1),
               ),
               SizedBox(height: large),
               Logout(),
@@ -333,8 +344,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             ),
             SizedBox(height: large),
             ElevatedButton(
-              onPressed: () => context.pushReplacementNamed("home_page",
-                  pathParameters: {'index': 2.toString()}),
+              // onPressed: () => context.pushReplacementNamed("home_page",
+              //     pathParameters: {'index': 2.toString()}),
+              onPressed: () => context.pop(),
               child: const Text("Back to profile page"),
             )
           ]),
