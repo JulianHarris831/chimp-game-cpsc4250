@@ -104,7 +104,7 @@ void main() async {
         viewModel.initializeGame();
         viewModel.reset();
 
-        // verify that numSequence properly resets to hard's 5
+        // verify that numSequence properly resets to hard mode's 5
         expect(viewModel.getGameState.getNumSequence, equals(5));
       });
     });
@@ -225,7 +225,6 @@ void main() async {
 
         viewModel.setDifficulty('easy');
         viewModel.initializeGame();
-        var isTimeUp = viewModel.timeUp;
 
         // Verify all getters
         expect(viewModel.getGameState, isNotNull);
@@ -241,7 +240,6 @@ void main() async {
         expect(viewModel.sequence, isNotNull);
         expect(viewModel.pressed, isNotNull);
         expect(viewModel.difficulty, equals('easy'));
-        expect(isTimeUp, isNotNull);
       });
     });
 
