@@ -1,12 +1,11 @@
-import 'package:chimp_game/firebase/firebase_options.dart';
 import 'package:chimp_game/firebase/login_view.dart';
 import 'package:chimp_game/firebase/register_view.dart';
+import 'package:chimp_game/firebase/user_auth.dart';
 import 'package:chimp_game/game_state_view_model.dart';
 import 'package:chimp_game/home_page.dart';
 import 'package:chimp_game/main_menu_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:chimp_game/alerts.dart';
@@ -22,12 +21,14 @@ import 'login_view_test.mocks.dart';
 // flutter test test/firebase/login_view_test.dart
 // flutter pub run build_runner build
 
-@GenerateMocks([
-  FirebaseAuth,
-  User,
-  UserCredential,
-  NavigatorObserver,
-])
+// @GenerateMocks([
+//   FirebaseAuth,
+//   User,
+//   UserCredential,
+//   NavigatorObserver,
+// ])
+
+@GenerateMocks([FirebaseAuth, UserAuth])
 class MockFunctionCall extends Mock {
   //int check = 0;
 
@@ -101,6 +102,57 @@ void main() async {
   testWidgets(
       "LoginView() can navigate to MyHomePage() with valid Login information",
       (tester) async {
+    MockUserAuth userAuth = MockUserAuth();
+    final router = GoRouter(initialLocation: "/login_view", routes: [
+      GoRoute(
+        path: "/login_view",
+        name: "login_view",
+        builder: (context, state) => LoginView(user: userAuth),
+      ),
+      GoRoute(
+        path: "/home_page/:index",
+        name: "home_page",
+        builder: (context, state) {
+          final index = int.parse(state.pathParameters['index']!);
+          return MyHomePage(pageIndex: index);
+        },
+      ),
+    ]);
+
+    await tester.pumpWidget(ChangeNotifierProvider(
+      create: (context) => GameStateViewModel(),
+      child: MaterialApp.router(
+        routerConfig: router,
+      ),
+    ));
+
+    final BuildContext context = tester.element(find.byType(LoginView));
+
+    when(userAuth.signIn(context, "test1@gmail.com", "123456"))
+        .thenAnswer((_) => Future.value(true));
+
+    final emailField = find.widgetWithText(TextField, "Enter your email here!");
+    final passwordField =
+        find.widgetWithText(TextField, "Enter your password here!");
+    final loginButton = find.widgetWithText(TextButton, "Login");
+
+    await tester.enterText(emailField, "test1@gmail.com");
+    await tester.pump();
+    await tester.enterText(passwordField, "123456");
+    await tester.pump();
+
+    await tester.tap(loginButton);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(MainMenuPage), findsOneWidget);
+    //expect(find.text("Login"), findsOneWidget);
+  });
+
+  //THIS METHOD BELOW DOES NOT WORK YET
+/*
+  testWidgets(
+      "LoginView() can navigate to MyHomePage() with valid Login information",
+      (tester) async {
     MockFirebaseAuth firebaseAuth = MockFirebaseAuth();
     MockUser user = MockUser();
     MockUserCredential userCredential = MockUserCredential();
@@ -135,8 +187,6 @@ void main() async {
     //expect(find.byType(LoginView), findsOneWidget);
   });
 
-  //THIS METHOD BELOW DOES NOT WORK YET
-/*
   testWidgets(
       "LoginView() can navigate to MyHomePage() with valid Login information",
       (tester) async {

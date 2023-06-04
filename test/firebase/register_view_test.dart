@@ -1,18 +1,13 @@
-import 'package:chimp_game/firebase/firebase_options.dart';
 import 'package:chimp_game/firebase/login_view.dart';
 import 'package:chimp_game/firebase/register_view.dart';
 import 'package:chimp_game/game_state_view_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:chimp_game/alerts.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mockito/mockito.dart';
-import 'package:mockito/annotations.dart';
 import 'package:firebase_core_platform_interface/firebase_core_platform_interface.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 // flutter test test/firebase/register_view_test.dart
 
@@ -43,12 +38,12 @@ void main() async {
 
     expect(find.widgetWithText(TextButton, "Register"), findsOneWidget);
     expect(find.byType(RegisterView), findsOneWidget);
-    expect(find.widgetWithText(ElevatedButton, "Continue as Guest"),
-        findsOneWidget);
   });
 
-  testWidgets("RegisterView() can navigate to LoginView()", (tester) async {
-    final router = GoRouter(initialLocation: "/register_view", routes: [
+  testWidgets(
+      "Start from LoginView() to navigate to then test whether RegisterView() can navigate to LoginView()",
+      (tester) async {
+    final router = GoRouter(initialLocation: "/login_view", routes: [
       GoRoute(
         path: "/login_view",
         name: "login_view",
@@ -69,8 +64,16 @@ void main() async {
     ));
     await tester.pump();
 
-    expect(find.text('Click here to login!'), findsOneWidget);
-    await tester.tap(find.text('Click here to login!'));
+    expect(find.text('Click here to register!'), findsOneWidget);
+    await tester.tap(find.text('Click here to register!'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(RegisterView), findsOneWidget);
+    final backButtonFinder = find.byTooltip('Back');
+    expect(backButtonFinder, findsOneWidget);
+
+    // Tap the back button
+    await tester.tap(backButtonFinder);
     await tester.pumpAndSettle();
 
     expect(find.byType(LoginView), findsOneWidget);

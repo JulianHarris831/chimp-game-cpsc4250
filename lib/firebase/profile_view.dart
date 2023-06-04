@@ -108,10 +108,6 @@ class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
     }
   }
 
-  void refreshPage() {
-    setState(() {});
-  }
-
   @override
   void initState() {
     retrieveProfilePicture();
@@ -132,6 +128,7 @@ class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
           int highscore = data['highscore'] as int;
+          String nickname = data['nickname'] as String;
 
           return Column(
             children: [
@@ -152,7 +149,7 @@ class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(widget.user.displayName!, style: heading2),
+                      Text(nickname, style: heading2),
                       Text("uid: ${widget.user.uid}", style: form3),
                     ],
                   ),
@@ -204,9 +201,10 @@ class _FireBaseAccountProfileState extends State<FireBaseAccountProfile> {
                 ),
               ),
               SizedBox(height: large),
-              Logout(),
+              Logout(
+                userAuth: _userAuth,
+              ),
               SizedBox(height: small),
-              //RefreshProfilePage(refreshPage: refreshPage)
             ],
           );
         }
@@ -230,7 +228,6 @@ class ProfileEditPage extends StatefulWidget {
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
   TextEditingController _newNickName = TextEditingController();
-  final user = FirebaseAuth.instance.currentUser;
   final ImageHelper imageHelper = ImageHelper();
 
   _cropImage(XFile? file) async {
@@ -291,7 +288,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   @override
   void initState() {
     super.initState();
-    _newNickName = TextEditingController(text: user!.displayName);
+    _newNickName = TextEditingController(text: widget.user.displayName);
   }
 
   @override
@@ -324,8 +321,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 if (_newNickName == null || _newNickName.text.isEmpty) {
                   displayErrorMsg(context, "Nickname cannot be empty!");
                 } else {
-                  await user!.updateDisplayName(_newNickName.text);
-                  updateNicknameByID(user!.uid, _newNickName.text);
+                  await widget.user.updateDisplayName(_newNickName.text);
+                  updateNicknameByID(widget.user.uid, _newNickName.text);
                   // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

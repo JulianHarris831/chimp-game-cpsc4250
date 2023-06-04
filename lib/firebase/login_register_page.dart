@@ -1,5 +1,6 @@
 import 'package:chimp_game/difficulty_page.dart';
 import 'package:chimp_game/firebase/profile_view.dart';
+import 'package:chimp_game/firebase/user_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -73,11 +74,6 @@ final router = GoRouter(initialLocation: "/login_or_register", routes: [
     name: "difficulty_page",
     builder: (context, state) => const DifficultyPage(),
   ),
-  // GoRoute(
-  //   path: "/profile_edit",
-  //   name: "profile_edit",
-  //   builder: (context, state) => const ProfileEditPage(),
-  // ),
   GoRoute(
     path: "/game_page",
     name: "game_page",
@@ -109,8 +105,9 @@ class ChimpGame extends StatelessWidget {
 }
 
 class LoginOrRegister extends StatelessWidget {
-  const LoginOrRegister({Key? key, required this.autoLogin}) : super(key: key);
+  LoginOrRegister({Key? key, required this.autoLogin}) : super(key: key);
   final bool autoLogin;
+  final UserAuth _userAuth = UserAuth();
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

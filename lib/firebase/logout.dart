@@ -9,16 +9,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'login_register_page.dart';
 
 class Logout extends StatelessWidget {
-  Logout({super.key});
+  Logout({super.key, required this.userAuth});
 
-  final UserAuth _userAuth = UserAuth();
+  final UserAuth userAuth;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
         autoLogin = false;
-        await _userAuth.signOut();
+        await userAuth.signOut();
         context.pushReplacementNamed("login_or_register");
       },
       style: ButtonStyle(

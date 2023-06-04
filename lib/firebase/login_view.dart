@@ -27,7 +27,8 @@ class SlidePageRoute<T> extends PageRouteBuilder<T> {
 }
 
 class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+  const LoginView({super.key, this.user});
+  final UserAuth? user;
 
   @override
   State<LoginView> createState() => _LoginViewState();
@@ -38,7 +39,7 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   String? temp;
-  final UserAuth _userAuth = UserAuth();
+  UserAuth? _userAuth;
 
   @override
   void initState() {
@@ -56,6 +57,11 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.user == null) {
+      _userAuth = UserAuth();
+    } else {
+      _userAuth = widget.user;
+    }
     return Scaffold(
       appBar: AppBar(
           title: Text('Welcome!', style: heading3), backgroundColor: orange),
@@ -95,8 +101,9 @@ class _LoginViewState extends State<LoginView> {
                     temp = null;
                     final email = _email.text;
                     final password = _password.text;
+
                     bool loggedIn =
-                        await _userAuth.signIn(context, email, password);
+                        await _userAuth!.signIn(context, email, password);
 
                     const Duration(seconds: 2);
 

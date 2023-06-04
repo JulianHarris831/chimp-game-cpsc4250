@@ -86,7 +86,7 @@ class _FirestoreLeaderboardState extends State<FirestoreLeaderboard> {
           return Text('Error loading data: ${snapshot.error}');
         } else {
           loadPlayers(snapshot);
-          Duration(seconds: 1);
+          const Duration(seconds: 3);
           return Column(
             children: [
               Container(
@@ -139,7 +139,7 @@ class PlayerDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (player.nickname == user!.displayName) {
+    if (player.playerId == user?.uid) {
       return Container(
         color: blue,
         child: Row(

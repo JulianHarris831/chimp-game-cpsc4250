@@ -9,14 +9,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserAuth {
-  //final FirebaseAuth auth;
   User? _user;
   final ImagePicker _imagePicker = ImagePicker();
   final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
-
   UserAuth();
-
-  //User get user => _user ?? FirebaseAuth.instance.currentUser!;
 
   Future<bool> signIn(
       BuildContext context, String email, String password) async {
@@ -105,7 +101,6 @@ class UserAuth {
         const SnackBar(content: Text('Image updated successfully')),
       );
     } catch (e) {
-      print('Error saving profile picture: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error saving profile picture: $e')),
       );
@@ -127,11 +122,9 @@ class UserAuth {
         final String downloadURL = await reference.getDownloadURL();
         return downloadURL;
       } else {
-        print('No profile picture available');
         return " ";
       }
     } catch (e) {
-      print('Error retrieving profile picture: $e');
       return " ";
     }
   }
