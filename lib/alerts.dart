@@ -55,19 +55,6 @@ displaySuccessMsg(BuildContext context, String successMsg) {
   ).show();
 }
 
-Future<Widget> checkHighscore(GameStateViewModel gameStateViewModel) async {
-  User? user = FirebaseAuth.instance.currentUser;
-  String uid = user!.uid;
-  bool isNewHighscore =
-      await updateHighscoreByID(uid, gameStateViewModel.scores);
-
-  return Text(
-    'Final Score: ${gameStateViewModel.scores}${isNewHighscore ? "\nCongratulations for new high score!" : ""}',
-    style: heading3,
-    textAlign: TextAlign.center,
-  );
-}
-
 displayGameOver(BuildContext context, ScreenshotController controller) async {
   final gameStateViewModel = context.read<GameStateViewModel>();
   int previousHighScore = 0;
