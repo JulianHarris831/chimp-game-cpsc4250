@@ -16,6 +16,7 @@ void main() {
 
   testWidgets('Testing easy button properly navigates', (tester) async{
     final testViewModel = GameStateViewModel();
+    testViewModel.test = true;
 
     const destinationChecker = '12345';
     final router = GoRouter(
@@ -53,6 +54,7 @@ void main() {
 
   testWidgets('Testing that medium button properly navigates', (tester) async{
     final testViewModel = GameStateViewModel();
+    testViewModel.test = true;
 
     const destinationChecker = '12345';
     final router = GoRouter(
@@ -90,6 +92,7 @@ void main() {
 
   testWidgets('Testing that hard button properly navigates', (tester) async{
     final testViewModel = GameStateViewModel();
+    testViewModel.test = true;
 
     const destinationChecker = '12345';
     final router = GoRouter(

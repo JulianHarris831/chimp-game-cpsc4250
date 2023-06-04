@@ -20,12 +20,20 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(medium),
-        child: SafeArea(
-          child: isGuest
-              ? const GuestProfile()
-              : FireBaseAccountProfile(user: user!),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/chimp-game.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(medium),
+          child: SafeArea(
+            child: isGuest
+                ? const GuestProfile()
+                : FireBaseAccountProfile(user: user!),
+          ),
         ),
       ),
     );

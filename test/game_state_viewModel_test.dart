@@ -252,6 +252,7 @@ void main() async {
         final controller = ScreenshotController();
 
         viewModel.setDifficulty('easy');
+        viewModel.test = true;
         viewModel.initializeGame();
         viewModel.update(context, controller);
 
@@ -265,6 +266,7 @@ void main() async {
         final controller = ScreenshotController();
 
         viewModel.setDifficulty('easy');
+        viewModel.test = true;
         viewModel.initializeGame();
 
         // Verify initial level and states for 'easy' level 1
@@ -308,6 +310,7 @@ void main() async {
         final controller = ScreenshotController();
 
         viewModel.setDifficulty('easy');
+        viewModel.test = true;
         viewModel.initializeGame();
         await tester.pump(const Duration(seconds: 5));
 
@@ -400,6 +403,23 @@ void main() async {
         expect(viewModel.lives, equals(0));
         viewModel.updateLives();
         expect(viewModel.lives, equals(0));
+      });
+    });
+
+    group('timer and pause', () {
+      testWidgets('calling timer checks pause function', (tester) async {
+        final viewModel = GameStateViewModel();
+        expect(viewModel.test, isFalse);
+
+        // Verify initial fadeTime to be 3
+        expect(viewModel.fadeTime, equals(3));
+
+        // Call timer to check pause function
+        viewModel.timer();
+        await tester.pump(const Duration(seconds: 5));
+
+        // Verify setStarted is called after 3 sec
+        expect(viewModel.started, isTrue);
       });
     });
   });

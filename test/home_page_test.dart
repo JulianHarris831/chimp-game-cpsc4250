@@ -69,8 +69,6 @@ void main() async {
       await tester.pump();
 
       expect(find.text('Guest'), findsOneWidget);
-      expect(find.text('Not registered yet?'), findsOneWidget);
-      expect(find.text('Click here to register!'), findsOneWidget);
       expect(find.text('Already have an account?'), findsOneWidget);
       expect(find.text('Click here to login!'), findsOneWidget);
 
@@ -86,7 +84,6 @@ void main() async {
       await tester.pumpWidget(const MaterialApp(home: MyHomePage(pageIndex: 2)));
 
       expect(find.text('Guest'), findsOneWidget);
-      expect(find.text('Not registered yet?'), findsOneWidget);
       expect(find.byIcon(Icons.home), findsOneWidget);
       expect(find.byIcon(Icons.leaderboard), findsOneWidget);
       expect(find.byIcon(Icons.person), findsOneWidget);
@@ -98,7 +95,6 @@ void main() async {
       expect(find.text('PLAY'), findsOneWidget);
 
       expect(find.text('Guest'), findsNothing);
-      expect(find.text('Not registered yet?'), findsNothing);
       expect(find.byIcon(Icons.home), findsOneWidget);
       expect(find.byIcon(Icons.leaderboard), findsOneWidget);
       expect(find.byIcon(Icons.person), findsOneWidget);

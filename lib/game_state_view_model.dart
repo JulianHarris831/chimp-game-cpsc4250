@@ -6,6 +6,7 @@ import 'dart:io';
 
 class GameStateViewModel extends ChangeNotifier {
   final _gameState = GameState();
+  bool test = false;
 
   void setDifficulty(String difficultyChosen) {
     _gameState.setDifficultySettings(difficultyChosen);
@@ -19,13 +20,15 @@ class GameStateViewModel extends ChangeNotifier {
     return fadeTime;
   }
   void timer() async{
-    //UUID is our startTime. This could be improved to something more unique!
-    double startFade = fadeTime; //this needs to be set every time timer is run!
-    await pause();
-    //This only seems to run one time. Is fadeTime set one time and just never again?
-    if(startFade == fadeTime){
-      _gameState.setStarted();
-      notifyListeners();
+    if (!test) {
+      //UUID is our startTime. This could be improved to something more unique!
+      double startFade = fadeTime; //this needs to be set every time timer is run!
+      await pause();
+      //This only seems to run one time. Is fadeTime set one time and just never again?
+      if (startFade == fadeTime) {
+        _gameState.setStarted();
+        notifyListeners();
+      }
     }
   }
 

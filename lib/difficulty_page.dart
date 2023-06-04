@@ -30,62 +30,70 @@ class DifficultyPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Choose your Difficulty"),
       ),
-      body: Center(
-        child: Column (
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 300.0,
-              height: 100.0,
-              child: ElevatedButton.icon( //focus on implementing 3x3 game first
-                  onPressed: () { _onDifficultyChosen(context, "Easy"); },
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/monkey-pipe.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(height:66),
+              SizedBox(
+                width: 300.0,
+                height: 100.0,
+                child: ElevatedButton.icon( //focus on implementing 3x3 game first
+                    onPressed: () { _onDifficultyChosen(context, "Easy"); },
+                    icon: const Icon(
+                      Icons.directions_run,
+                      size: 24.0,
+                    ),
+                  label: const Text("Easy"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(height:30),
+              SizedBox(
+                width: 300.0,
+                height: 100.0,
+                child: ElevatedButton.icon(
+                  onPressed: () { _onDifficultyChosen(context, "Medium"); },
                   icon: const Icon(
-                    Icons.directions_run,
+                    Icons.directions_bike,
                     size: 24.0,
                   ),
-                label: const Text("Easy"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
+                  label: const Text("Medium"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orangeAccent,
+                    foregroundColor: Colors.white,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height:30),
-            SizedBox(
-              width: 300.0,
-              height: 100.0,
-              child: ElevatedButton.icon(
-                onPressed: () { _onDifficultyChosen(context, "Medium"); },
-                icon: const Icon(
-                  Icons.directions_bike,
-                  size: 24.0,
-                ),
-                label: const Text("Medium"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orangeAccent,
-                  foregroundColor: Colors.white,
-                ),
-              ),
-            ),
-            const SizedBox(height:30),
-            SizedBox(
-              width: 300.0,
-              height: 100.0,
-              child: ElevatedButton.icon(
-                onPressed: () { _onDifficultyChosen(context, "Hard"); },
-                icon: const Icon(
-                  Icons.directions_car,
-                  size: 24.0,
-                ),
-                label: const Text("Hard"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
+              const SizedBox(height:30),
+              SizedBox(
+                width: 300.0,
+                height: 100.0,
+                child: ElevatedButton.icon(
+                  onPressed: () { _onDifficultyChosen(context, "Hard"); },
+                  icon: const Icon(
+                    Icons.directions_car,
+                    size: 24.0,
+                  ),
+                  label: const Text("Hard"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                  ),
                 ),
               ),
-            ),
-            //Expanded(child: GamePage()),
-          ],
+              //Expanded(child: GamePage()),
+            ],
+          ),
         ),
       ),
     );

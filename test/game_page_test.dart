@@ -12,6 +12,7 @@ void main() {
     //await tester.pumpWidget(const MaterialApp(home: GamePage()));
     final testViewModel = GameStateViewModel();
     testViewModel.setDifficulty('easy');
+    testViewModel.test = true;
     testViewModel.initializeGame();
 
     await tester.pumpWidget(
@@ -32,10 +33,35 @@ void main() {
     //expect(find.text('1'), findsOneWidget);
   });
 
+  testWidgets('Checks pressing the button calls onButtonPressed and update', (tester) async {
+    final testViewModel = GameStateViewModel();
+    testViewModel.setDifficulty('easy');
+    testViewModel.test = true;
+    testViewModel.initializeGame();
+
+    await tester.pumpWidget(
+        ChangeNotifierProvider.value(
+            value: testViewModel,
+            child: const MaterialApp(home: GamePage())
+        )
+    );
+    await tester.pumpAndSettle();
+
+    // Verify that the player starts from Level 1
+    expect(find.text('CHIMP GAME: Level 1'), findsOneWidget);
+
+    //tap an elevatedButton
+    await tester.tap(find.byType(ElevatedButton).first);
+
+    //Verify that the player continues to be in Level 1 after button press
+    expect(find.text('CHIMP GAME: Level 1'), findsOneWidget);
+  });
+
   testWidgets('Check response when correct button is pressed', (tester) async {
     //await tester.pumpWidget(const MaterialApp(home: GamePage()));
     final testViewModel = GameStateViewModel();
     testViewModel.setDifficulty('easy');
+    testViewModel.test = true;
     testViewModel.initializeGame();
 
     await tester.pumpWidget(
@@ -62,6 +88,7 @@ void main() {
   testWidgets('Check response when wrong sequence is pressed', (tester) async {
     final testViewModel = GameStateViewModel();
     testViewModel.setDifficulty('medium');
+    testViewModel.test = true;
     testViewModel.initializeGame();
 
     await tester.pumpWidget(
@@ -90,6 +117,7 @@ void main() {
   testWidgets('Checks navigation via Home icon', (tester) async {
     final testViewModel = GameStateViewModel();
     testViewModel.setDifficulty('hard');
+    testViewModel.test = true;
     testViewModel.initializeGame();
 
     const destinationIdentifier = 'asjkdae7148193sads'; // unique string id
