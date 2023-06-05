@@ -15,14 +15,16 @@ class GameStateViewModel extends ChangeNotifier {
 
   Future<double> pause() async {
     //double elapsed = _gameState.getStartTime.difference(DateTime.now()).inSeconds.abs().toDouble();
-    final millTime = (fadeTime*1000).round();
+    final millTime = (fadeTime * 1000).round();
     await Future.delayed(Duration(milliseconds: millTime));
     return fadeTime;
   }
-  void timer() async{
+
+  void timer() async {
     if (!test) {
       //UUID is our startTime. This could be improved to something more unique!
-      double startFade = fadeTime; //this needs to be set every time timer is run!
+      double startFade =
+          fadeTime; //this needs to be set every time timer is run!
       await pause();
       //This only seems to run one time. Is fadeTime set one time and just never again?
       if (startFade == fadeTime) {
@@ -50,16 +52,17 @@ class GameStateViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onButtonPressed(int index){
-    if (!started) { _gameState.setStarted(); }
+  void onButtonPressed(int index) {
+    if (!started) {
+      _gameState.setStarted();
+    }
     if (!pressed![index]) {
       pressed![index] = true;
-      if (sequence!.containsKey(index) && playerIndex == sequence![index]-1) {
+      if (sequence!.containsKey(index) && playerIndex == sequence![index] - 1) {
         print('Player taps on the correct square: $playerIndex Add scores..');
         _gameState.addToScores();
         _gameState.updatePlayerSequenceIndex();
-      }
-      else {
+      } else {
         _gameState.removeLife();
         refresh();
         print('Player taps on the wrong square. Refreshing game state..');
@@ -68,14 +71,15 @@ class GameStateViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void update(BuildContext context, ScreenshotController controller) {
+  void update(BuildContext context, ScreenshotController controller,
+      bool updateCalled, Function callback) {
     print('player index: $playerIndex; correct sequence required $numSequence');
     if (playerIndex >= numSequence) {
       _gameState.nextLevel();
       refresh();
-    }
-    else if (lives == 0) {
-      displayGameOver(context, controller);
+    } else if (lives == 0 && !updateCalled) {
+      callback(true);
+      displayGameOver(context, controller, callback);
     }
     notifyListeners();
   }

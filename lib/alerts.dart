@@ -55,7 +55,8 @@ displaySuccessMsg(BuildContext context, String successMsg) {
   ).show();
 }
 
-displayGameOver(BuildContext context, ScreenshotController controller) async {
+displayGameOver(BuildContext context, ScreenshotController controller,
+    Function callback) async {
   final gameStateViewModel = context.read<GameStateViewModel>();
   int previousHighScore = 0;
   bool isNewHighscore = false;
@@ -116,6 +117,7 @@ displayGameOver(BuildContext context, ScreenshotController controller) async {
             displaySuccessMsg(context, "Game Result saved to Photo Gallery!");
             await _saveImageToGallery(image);
           }
+          callback(false);
         },
         color: Colors.orange,
         child: Text('Save Result', style: bold15),
@@ -123,6 +125,7 @@ displayGameOver(BuildContext context, ScreenshotController controller) async {
       DialogButton(
         onPressed: () {
           Navigator.of(context, rootNavigator: true).pop();
+          callback(false);
           gameStateViewModel.reset();
         },
         color: Colors.orange,
@@ -131,6 +134,7 @@ displayGameOver(BuildContext context, ScreenshotController controller) async {
       DialogButton(
         onPressed: () {
           Navigator.of(context, rootNavigator: true).pop();
+          callback(false);
           context.pushReplacementNamed('leaderboard_page');
         },
         color: Colors.orange,
@@ -139,6 +143,7 @@ displayGameOver(BuildContext context, ScreenshotController controller) async {
       DialogButton(
         onPressed: () {
           Navigator.of(context, rootNavigator: true).pop();
+          callback(false);
           context.goNamed('home_page', pathParameters: {'index': 0.toString()});
         },
         color: Colors.orange,

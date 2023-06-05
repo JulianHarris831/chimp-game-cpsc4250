@@ -23,8 +23,13 @@ void main() async {
     await Firebase.initializeApp();
   });
 
+  void callbackDecoy(bool value) {
+    bool decoy = value;
+  }
+
   group('displayErrorMsg and displaySuccessMsg Alert tests', () {
-    testWidgets('displayErrorMsg shows error alert', (WidgetTester tester) async {
+    testWidgets('displayErrorMsg shows error alert',
+        (WidgetTester tester) async {
       const errorMsg = 'Test Error Message';
 
       await tester.pumpWidget(MaterialApp(
@@ -53,7 +58,8 @@ void main() async {
       expect(find.text('Try again'), findsOneWidget);
     });
 
-    testWidgets('displayErrorMsg alert pops context when tapping Try Again', (WidgetTester tester) async {
+    testWidgets('displayErrorMsg alert pops context when tapping Try Again',
+        (WidgetTester tester) async {
       const errorMsg = 'Test Error Message';
 
       await tester.pumpWidget(MaterialApp(
@@ -89,7 +95,8 @@ void main() async {
       expect(find.text('Show Error Alert'), findsOneWidget);
     });
 
-    testWidgets('displaySuccessMsg shows success alert', (WidgetTester tester) async {
+    testWidgets('displaySuccessMsg shows success alert',
+        (WidgetTester tester) async {
       const successMsg = 'Test Success Message';
 
       await tester.pumpWidget(MaterialApp(
@@ -118,7 +125,8 @@ void main() async {
       expect(find.text('OK'), findsOneWidget);
     });
 
-    testWidgets('displaySuccessMsg alert pops context when tapping OK', (WidgetTester tester) async {
+    testWidgets('displaySuccessMsg alert pops context when tapping OK',
+        (WidgetTester tester) async {
       const successMsg = 'Test Success Message';
 
       await tester.pumpWidget(MaterialApp(
@@ -156,25 +164,25 @@ void main() async {
   });
 
   group('displayGameOver Alert tests', () {
-    testWidgets('displayGameOver shows game over screen', (WidgetTester tester) async {
+    testWidgets('displayGameOver shows game over screen',
+        (WidgetTester tester) async {
       final testViewModel = GameStateViewModel();
       final controller = ScreenshotController();
 
       await tester.pumpWidget(ChangeNotifierProvider.value(
-        value: testViewModel,
-        child: MaterialApp(
-          home: Builder(
-            builder: (BuildContext context) {
-              return ElevatedButton(
-                onPressed: () {
-                  displayGameOver(context, controller);
-                },
-                child: const Text('Show Game Over Alert'),
-              );
-            },
-          ),
-        )
-      ));
+          value: testViewModel,
+          child: MaterialApp(
+            home: Builder(
+              builder: (BuildContext context) {
+                return ElevatedButton(
+                  onPressed: () {
+                    displayGameOver(context, controller, callbackDecoy);
+                  },
+                  child: const Text('Show Game Over Alert'),
+                );
+              },
+            ),
+          )));
 
       // Verify that the 'Show Game Over Alert' button is there
       expect(find.text('Show Game Over Alert'), findsOneWidget);
@@ -191,7 +199,9 @@ void main() async {
       expect(find.text('Main Menu'), findsOneWidget);
     });
 
-    testWidgets('displayGameOver tapping Save Result when image is null display errorMsg', (WidgetTester tester) async {
+    testWidgets(
+        'displayGameOver tapping Save Result when image is null display errorMsg',
+        (WidgetTester tester) async {
       final testViewModel = GameStateViewModel();
       final controller = ScreenshotController();
 
@@ -202,14 +212,13 @@ void main() async {
               builder: (BuildContext context) {
                 return ElevatedButton(
                   onPressed: () {
-                    displayGameOver(context, controller);
+                    displayGameOver(context, controller, callbackDecoy);
                   },
                   child: const Text('Show Game Over Alert'),
                 );
               },
             ),
-          )
-      ));
+          )));
 
       // Verify that the 'Show Game Over Alert' button is there
       expect(find.text('Show Game Over Alert'), findsOneWidget);
@@ -230,7 +239,8 @@ void main() async {
       expect(find.text('Failed to save result to Gallery.'), findsOneWidget);
     });
 
-    testWidgets('displayGameOver tapping Try Again pops current context', (WidgetTester tester) async {
+    testWidgets('displayGameOver tapping Try Again pops current context',
+        (WidgetTester tester) async {
       final testViewModel = GameStateViewModel();
       testViewModel.test = true;
       final controller = ScreenshotController();
@@ -242,14 +252,13 @@ void main() async {
               builder: (BuildContext context) {
                 return ElevatedButton(
                   onPressed: () {
-                    displayGameOver(context, controller);
+                    displayGameOver(context, controller, callbackDecoy);
                   },
                   child: const Text('Show Game Over Alert'),
                 );
               },
             ),
-          )
-      ));
+          )));
 
       // Verify that the 'Show Game Over Alert' button is there
       expect(find.text('Show Game Over Alert'), findsOneWidget);
@@ -270,42 +279,40 @@ void main() async {
       expect(find.text('Show Game Over Alert'), findsOneWidget);
     });
 
-    testWidgets('displayGameOver tapping View Leaderboard navigates to LeaderboardPage', (WidgetTester tester) async {
+    testWidgets(
+        'displayGameOver tapping View Leaderboard navigates to LeaderboardPage',
+        (WidgetTester tester) async {
       final testViewModel = GameStateViewModel();
       final controller = ScreenshotController();
 
       const destinationIdentifier = 'sajkdas9824294jaa'; // unique string id
-      final router = GoRouter(
-          routes: [
-            GoRoute(
-                path: '/',
-                builder: (context, _) => MaterialApp(
+      final router = GoRouter(routes: [
+        GoRoute(
+            path: '/',
+            builder: (context, _) => MaterialApp(
                   home: Builder(
                     builder: (BuildContext context) {
                       return ElevatedButton(
                         onPressed: () {
-                          displayGameOver(context, controller);
+                          displayGameOver(context, controller, callbackDecoy);
                         },
                         child: const Text('Show Game Over Alert'),
                       );
                     },
                   ),
-                )
-            ),
-            GoRoute(
-                path: '/leaderboard_page',
-                name: 'leaderboard_page',
-                builder: (context, _) => const Scaffold(body: Text(destinationIdentifier))
-            ),
-          ]
-      );
+                )),
+        GoRoute(
+            path: '/leaderboard_page',
+            name: 'leaderboard_page',
+            builder: (context, _) =>
+                const Scaffold(body: Text(destinationIdentifier))),
+      ]);
 
       await tester.pumpWidget(ChangeNotifierProvider.value(
           value: testViewModel,
           child: MaterialApp.router(
             routerConfig: router,
-          )
-      ));
+          )));
 
       // Verify that the 'Show Game Over Alert' button is there
       expect(find.text('Show Game Over Alert'), findsOneWidget);
@@ -326,45 +333,42 @@ void main() async {
       expect(find.text(destinationIdentifier), findsOneWidget);
     });
 
-    testWidgets('displayGameOver tapping Main Menu navigates to Main Menu', (WidgetTester tester) async {
+    testWidgets('displayGameOver tapping Main Menu navigates to Main Menu',
+        (WidgetTester tester) async {
       final testViewModel = GameStateViewModel();
       final controller = ScreenshotController();
 
       const destinationIdentifier = 'sajkeas7842174jnksa'; // unique string id
-      final router = GoRouter(
-          routes: [
-            GoRoute(
-                path: '/',
-                builder: (context, _) => MaterialApp(
+      final router = GoRouter(routes: [
+        GoRoute(
+            path: '/',
+            builder: (context, _) => MaterialApp(
                   home: Builder(
                     builder: (BuildContext context) {
                       return ElevatedButton(
                         onPressed: () {
-                          displayGameOver(context, controller);
+                          displayGameOver(context, controller, callbackDecoy);
                         },
                         child: const Text('Show Game Over Alert'),
                       );
                     },
                   ),
-                )
-            ),
-            GoRoute(
-              path: "/home_page/:index",
-              name: "home_page",
-              builder: (context, state) {
-                final index = int.parse(state.pathParameters['index']!);
-                return const Scaffold(body: Text(destinationIdentifier));
-              },
-            ),
-          ]
-      );
+                )),
+        GoRoute(
+          path: "/home_page/:index",
+          name: "home_page",
+          builder: (context, state) {
+            final index = int.parse(state.pathParameters['index']!);
+            return const Scaffold(body: Text(destinationIdentifier));
+          },
+        ),
+      ]);
 
       await tester.pumpWidget(ChangeNotifierProvider.value(
           value: testViewModel,
           child: MaterialApp.router(
             routerConfig: router,
-          )
-      ));
+          )));
 
       // Verify that the 'Show Game Over Alert' button is there
       expect(find.text('Show Game Over Alert'), findsOneWidget);

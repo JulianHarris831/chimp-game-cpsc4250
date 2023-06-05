@@ -22,6 +22,10 @@ void main() async {
     await Firebase.initializeApp();
   });
 
+  void callbackDecoy(bool value) {
+    bool decoy = value;
+  }
+
   group('GameStateViewModel', () {
     group('setDifficulty', () {
       test('Setting difficulty updates a String in the view model.', () {
@@ -32,7 +36,9 @@ void main() async {
 
         expect(viewModel.getGameState.getDifficultyChosen, difficulty);
       });
-      test('Difficulty is not case sensitive and gets updated properly either way', () {
+      test(
+          'Difficulty is not case sensitive and gets updated properly either way',
+          () {
         final viewModel = GameStateViewModel();
         const difficulty = 'EASY';
         const expectedResult = 'easy';
@@ -46,30 +52,33 @@ void main() async {
 
     group('initializeGame', () {
       test('initializeGame should set default values based on difficulty', () {
-      final viewModel = GameStateViewModel();
+        final viewModel = GameStateViewModel();
 
-      viewModel.setDifficulty('easy'); //already tested above
-      viewModel.initializeGame();
+        viewModel.setDifficulty('easy'); //already tested above
+        viewModel.initializeGame();
 
-      //everything that initializedGame sets for easy is verified here
-      expect(viewModel.getGameState.getStarted, isFalse);
-      expect(viewModel.getGameState.getCurrentLevel, equals(1));
-      expect(viewModel.getGameState.getCurrentLives, equals(3));
-      expect(viewModel.getGameState.getScores, equals(0));
-      expect(viewModel.getGameState.getFadeTime, equals(3));
-      expect(viewModel.getGameState.getStartTime, isNotNull);
-      expect(viewModel.getGameState.getMaxSequence, equals(9));
-      expect(viewModel.getGameState.getNumSequence, equals(3));
-      expect(viewModel.getGameState.getMinFadeTime, equals(1));
-      expect(viewModel.getGameState.getPlayerSequenceIndex, equals(0));
-      expect(viewModel.getGameState.getPressed, isNotNull);
-      expect(viewModel.getGameState.getPressed!.length, equals(viewModel.getGameState.getGridSize));
+        //everything that initializedGame sets for easy is verified here
+        expect(viewModel.getGameState.getStarted, isFalse);
+        expect(viewModel.getGameState.getCurrentLevel, equals(1));
+        expect(viewModel.getGameState.getCurrentLives, equals(3));
+        expect(viewModel.getGameState.getScores, equals(0));
+        expect(viewModel.getGameState.getFadeTime, equals(3));
+        expect(viewModel.getGameState.getStartTime, isNotNull);
+        expect(viewModel.getGameState.getMaxSequence, equals(9));
+        expect(viewModel.getGameState.getNumSequence, equals(3));
+        expect(viewModel.getGameState.getMinFadeTime, equals(1));
+        expect(viewModel.getGameState.getPlayerSequenceIndex, equals(0));
+        expect(viewModel.getGameState.getPressed, isNotNull);
+        expect(viewModel.getGameState.getPressed!.length,
+            equals(viewModel.getGameState.getGridSize));
       });
       //additional initializeGame testing
     });
 
     group('reset', () {
-      test('reset should reset the game state to that of a new game with same settings', () {
+      test(
+          'reset should reset the game state to that of a new game with same settings',
+          () {
         final viewModel = GameStateViewModel();
 
         //to further test this, we ought to modify more before calling reset!
@@ -85,7 +94,8 @@ void main() async {
         expect(viewModel.getGameState.getScores, equals(0));
         expect(viewModel.getGameState.getPlayerSequenceIndex, equals(0));
         expect(viewModel.getGameState.getPressed, isNotNull);
-        expect(viewModel.getGameState.getPressed!.length, equals(viewModel.getGameState.getGridSize));
+        expect(viewModel.getGameState.getPressed!.length,
+            equals(viewModel.getGameState.getGridSize));
       });
       test('test reset for medium resets to the proper numSequence', () {
         final viewModel = GameStateViewModel();
@@ -110,7 +120,8 @@ void main() async {
     });
 
     group('refresh', () {
-      test('refresh should refresh the game state sequence and player index', () {
+      test('refresh should refresh the game state sequence and player index',
+          () {
         final viewModel = GameStateViewModel();
 
         //to further test this, we ought to modify more before calling refresh!
@@ -123,12 +134,15 @@ void main() async {
         expect(viewModel.getGameState.getStarted, isFalse);
         expect(viewModel.getGameState.getPlayerSequenceIndex, equals(0));
         expect(viewModel.getGameState.getPressed, isNotNull);
-        expect(viewModel.getGameState.getPressed!.length, equals(viewModel.getGameState.getGridSize));
+        expect(viewModel.getGameState.getPressed!.length,
+            equals(viewModel.getGameState.getGridSize));
       });
     });
 
     group('onButtonPressed', () {
-      test('pressing the correct sequence for the first time should set started', () {
+      test(
+          'pressing the correct sequence for the first time should set started',
+          () {
         final viewModel = GameStateViewModel();
 
         viewModel.setDifficulty('easy');
@@ -138,14 +152,16 @@ void main() async {
         expect(viewModel.getGameState.getStarted, isFalse);
 
         // Find the correct gridKey and press the correct sequence
-        int gridKey = viewModel.sequence!.keys.firstWhere(
-                (k) => viewModel.sequence![k] == 1, orElse: () => null);
+        int gridKey = viewModel.sequence!.keys
+            .firstWhere((k) => viewModel.sequence![k] == 1, orElse: () => null);
         viewModel.onButtonPressed(gridKey);
 
         // Verify that started is set to true
         expect(viewModel.getGameState.getStarted, isTrue);
       });
-      test('pressing the correct sequence should addToScores and update player index', () {
+      test(
+          'pressing the correct sequence should addToScores and update player index',
+          () {
         final viewModel = GameStateViewModel();
 
         viewModel.setDifficulty('easy');
@@ -156,15 +172,17 @@ void main() async {
         expect(viewModel.getGameState.getPlayerSequenceIndex, equals(0));
 
         // Find the correct gridKey and press the correct sequence
-        int gridKey = viewModel.sequence!.keys.firstWhere(
-                (k) => viewModel.sequence![k] == 1, orElse: () => null);
+        int gridKey = viewModel.sequence!.keys
+            .firstWhere((k) => viewModel.sequence![k] == 1, orElse: () => null);
         viewModel.onButtonPressed(gridKey);
 
         // Verify that the score and player sequence index updates
         expect(viewModel.getGameState.getScores, equals(10));
         expect(viewModel.getGameState.getPlayerSequenceIndex, equals(1));
       });
-      test('pressing the correct sequence on medium should have 2x score multiplier', () {
+      test(
+          'pressing the correct sequence on medium should have 2x score multiplier',
+          () {
         final viewModel = GameStateViewModel();
 
         // Set the game difficulty to medium
@@ -175,14 +193,16 @@ void main() async {
         expect(viewModel.getGameState.getScores, equals(0));
 
         // Find the correct gridKey and press the correct sequence
-        int gridKey = viewModel.sequence!.keys.firstWhere(
-                (k) => viewModel.sequence![k] == 1, orElse: () => null);
+        int gridKey = viewModel.sequence!.keys
+            .firstWhere((k) => viewModel.sequence![k] == 1, orElse: () => null);
         viewModel.onButtonPressed(gridKey);
 
         // Verify that the score updates to 20 (10 * 1 * 2)
         expect(viewModel.getGameState.getScores, equals(20));
       });
-      test('pressing the correct sequence on hard should have 3x score multiplier', () {
+      test(
+          'pressing the correct sequence on hard should have 3x score multiplier',
+          () {
         final viewModel = GameStateViewModel();
 
         // Set the game difficulty to hard
@@ -193,14 +213,16 @@ void main() async {
         expect(viewModel.getGameState.getScores, equals(0));
 
         // Find the correct gridKey and press the correct sequence
-        int gridKey = viewModel.sequence!.keys.firstWhere(
-                (k) => viewModel.sequence![k] == 1, orElse: () => null);
+        int gridKey = viewModel.sequence!.keys
+            .firstWhere((k) => viewModel.sequence![k] == 1, orElse: () => null);
         viewModel.onButtonPressed(gridKey);
 
         // Verify that the score updates to 20 (10 * 1 * 3)
         expect(viewModel.getGameState.getScores, equals(30));
       });
-      test('pressing the wrong sequence should remove life and refresh game state', () {
+      test(
+          'pressing the wrong sequence should remove life and refresh game state',
+          () {
         final viewModel = GameStateViewModel();
 
         viewModel.setDifficulty('easy');
@@ -210,8 +232,8 @@ void main() async {
         expect(viewModel.getGameState.getCurrentLives, equals(3));
 
         // Find the false gridKey and press the wrong sequence
-        int falseGridKey = viewModel.sequence!.keys.firstWhere(
-                (k) => viewModel.sequence![k] == 2, orElse: () => null);
+        int falseGridKey = viewModel.sequence!.keys
+            .firstWhere((k) => viewModel.sequence![k] == 2, orElse: () => null);
         viewModel.onButtonPressed(falseGridKey);
 
         // Verify that a life is lost due to pressing the wrong sequence
@@ -244,8 +266,10 @@ void main() async {
     });
 
     group('update with BuildContext', () {
-      testWidgets('test update with required BuildContext parameter', (tester) async {
-        await tester.pumpWidget(MaterialApp(home: Material(child: Container())));
+      testWidgets('test update with required BuildContext parameter',
+          (tester) async {
+        await tester
+            .pumpWidget(MaterialApp(home: Material(child: Container())));
         final BuildContext context = tester.element(find.byType(Container));
 
         final viewModel = GameStateViewModel();
@@ -254,12 +278,13 @@ void main() async {
         viewModel.setDifficulty('easy');
         viewModel.test = true;
         viewModel.initializeGame();
-        viewModel.update(context, controller);
+        viewModel.update(context, controller, false, callbackDecoy);
 
         expect(viewModel.getGameState, isNotNull);
       });
       testWidgets('test update for going to the next level', (tester) async {
-        await tester.pumpWidget(MaterialApp(home: Material(child: Container())));
+        await tester
+            .pumpWidget(MaterialApp(home: Material(child: Container())));
         final BuildContext context = tester.element(find.byType(Container));
 
         final viewModel = GameStateViewModel();
@@ -275,20 +300,20 @@ void main() async {
         expect(viewModel.numSequence, equals(3));
 
         // Press the 3 correct sequence to go to the next level
-        int gridKey1 = viewModel.sequence!.keys.firstWhere(
-                (k) => viewModel.sequence![k] == 1, orElse: () => null);
+        int gridKey1 = viewModel.sequence!.keys
+            .firstWhere((k) => viewModel.sequence![k] == 1, orElse: () => null);
         viewModel.onButtonPressed(gridKey1);
-        viewModel.update(context, controller);
+        viewModel.update(context, controller, false, callbackDecoy);
 
-        int gridKey2 = viewModel.sequence!.keys.firstWhere(
-                (k) => viewModel.sequence![k] == 2, orElse: () => null);
+        int gridKey2 = viewModel.sequence!.keys
+            .firstWhere((k) => viewModel.sequence![k] == 2, orElse: () => null);
         viewModel.onButtonPressed(gridKey2);
-        viewModel.update(context, controller);
+        viewModel.update(context, controller, false, callbackDecoy);
 
-        int gridKey3 = viewModel.sequence!.keys.firstWhere(
-                (k) => viewModel.sequence![k] == 3, orElse: () => null);
+        int gridKey3 = viewModel.sequence!.keys
+            .firstWhere((k) => viewModel.sequence![k] == 3, orElse: () => null);
         viewModel.onButtonPressed(gridKey3);
-        viewModel.update(context, controller);
+        viewModel.update(context, controller, false, callbackDecoy);
 
         // Verify that you go to the next level and game state is refreshed
         expect(viewModel.level, equals('Level 2'));
@@ -299,11 +324,9 @@ void main() async {
         final viewModel = GameStateViewModel();
 
         await tester.pumpWidget(
-          ChangeNotifierProvider<GameStateViewModel>.value(
-            value: viewModel,
-            child: MaterialApp(home: Material(child: Container()))
-          )
-        );
+            ChangeNotifierProvider<GameStateViewModel>.value(
+                value: viewModel,
+                child: MaterialApp(home: Material(child: Container()))));
         await tester.pumpAndSettle();
 
         final BuildContext context = tester.element(find.byType(Container));
@@ -318,22 +341,22 @@ void main() async {
         expect(viewModel.lives, equals(3));
 
         // Purposefully lose by pressing the wrong sequence 3x
-        int falseKey = viewModel.sequence!.keys.firstWhere(
-                (k) => viewModel.sequence![k] == 2, orElse: () => null);
+        int falseKey = viewModel.sequence!.keys
+            .firstWhere((k) => viewModel.sequence![k] == 2, orElse: () => null);
         viewModel.onButtonPressed(falseKey);
-        viewModel.update(context, controller);
+        viewModel.update(context, controller, false, callbackDecoy);
         expect(viewModel.lives, equals(2));
 
-        falseKey = viewModel.sequence!.keys.firstWhere(
-                (k) => viewModel.sequence![k] == 2, orElse: () => null);
+        falseKey = viewModel.sequence!.keys
+            .firstWhere((k) => viewModel.sequence![k] == 2, orElse: () => null);
         viewModel.onButtonPressed(falseKey);
-        viewModel.update(context, controller);
+        viewModel.update(context, controller, false, callbackDecoy);
         expect(viewModel.lives, equals(1));
 
-        falseKey = viewModel.sequence!.keys.firstWhere(
-                (k) => viewModel.sequence![k] == 2, orElse: () => null);
+        falseKey = viewModel.sequence!.keys
+            .firstWhere((k) => viewModel.sequence![k] == 2, orElse: () => null);
         viewModel.onButtonPressed(falseKey);
-        viewModel.update(context, controller);
+        viewModel.update(context, controller, false, callbackDecoy);
         expect(viewModel.lives, equals(0));
       });
     });
@@ -361,7 +384,8 @@ void main() async {
     });
 
     group('updateScore', () {
-      test('calling updateScore properly adds to score based on calculation', () {
+      test('calling updateScore properly adds to score based on calculation',
+          () {
         final viewModel = GameStateViewModel();
 
         viewModel.setDifficulty('easy');
