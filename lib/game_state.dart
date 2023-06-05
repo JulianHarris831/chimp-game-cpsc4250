@@ -4,7 +4,8 @@ class GameState {
   int _scores = 0;
   int _playerSequenceIndex = 0; // current index the player needs to taps
   double _fadeTime = 3; // sequence fade time; time to memorize (in s)
-  DateTime _startTime = DateTime.now(); //compare this to DateTime.now() to see if we are over fade time in seconds
+  DateTime _startTime = DateTime
+      .now(); //compare this to DateTime.now() to see if we are over fade time in seconds
 
   // default value: 'easy' difficulty 3x3 GameState
   bool _started = false;
@@ -21,12 +22,17 @@ class GameState {
     _difficultyChosen = difficultyChosen.toLowerCase();
   }
 
-  void setStarted() { _started = true; }
+  void setStarted() {
+    _started = true;
+  }
 
   void initGameState() {
-    _started = false; _currentLevel = 1;
-    _fadeTime = 3; _currentLives = 3;
-    _scores = 0; _playerSequenceIndex = 0;
+    _started = false;
+    _currentLevel = 1;
+    _fadeTime = 3;
+    _currentLives = 3;
+    _scores = 0;
+    _playerSequenceIndex = 0;
     _startTime = DateTime.now();
     if (_difficultyChosen == 'easy') {
       _gridSize = 9; // 3 x 3
@@ -38,8 +44,8 @@ class GameState {
       _numSequence = 4;
       _fadeTime = 3.5;
     } else {
-      _gridSize = 15; // 3 x 5
-      _maxSequence = 15;
+      _gridSize = 16; // 3 x 5
+      _maxSequence = 16;
       _numSequence = 5;
       _fadeTime = 4;
     }
@@ -48,12 +54,18 @@ class GameState {
   }
 
   void resetGameState() {
-    _currentLevel = 1; _fadeTime = 3;
-    _currentLives = 3; _scores = 0;
+    _currentLevel = 1;
+    _fadeTime = 3;
+    _currentLives = 3;
+    _scores = 0;
     _startTime = DateTime.now();
-    if(_difficultyChosen == 'easy') {_numSequence = 3;}
-    else if(_difficultyChosen == 'medium') {_numSequence = 4;}
-    else {_numSequence = 5;}
+    if (_difficultyChosen == 'easy') {
+      _numSequence = 3;
+    } else if (_difficultyChosen == 'medium') {
+      _numSequence = 4;
+    } else {
+      _numSequence = 5;
+    }
     refreshGameState();
     // Try again with same difficulty settings
   }
@@ -125,15 +137,15 @@ class GameState {
     randomSequence = randomSequence.take(_numSequence).toList();
 
     Map mapSequence = {};
-    for(int i = 0; i < _numSequence; i++){
-      mapSequence[randomSequence[i]] = i+1;
+    for (int i = 0; i < _numSequence; i++) {
+      mapSequence[randomSequence[i]] = i + 1;
     }
     _randomSequence = mapSequence;
   }
 
   void setPressed() {
     List<bool> pressed = [];
-    for(int i = 0; i < _maxSequence; i++){
+    for (int i = 0; i < _maxSequence; i++) {
       pressed.add(false);
     }
     _pressed = pressed;

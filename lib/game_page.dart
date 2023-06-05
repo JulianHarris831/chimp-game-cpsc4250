@@ -79,7 +79,8 @@ class _GamePageState extends State<GamePage> {
                     shrinkWrap: true,
                     mainAxisSpacing: 10.0,
                     crossAxisSpacing: 10.0,
-                    crossAxisCount: 3,
+                    crossAxisCount:
+                        gameStateViewModel.difficulty == 'hard' ? 4 : 3,
                     children:
                         List.generate(gameStateViewModel.gridSize, (index) {
                       if (index < gameStateViewModel.gridSize) {

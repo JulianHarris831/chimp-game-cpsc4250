@@ -59,25 +59,75 @@ final router = GoRouter(initialLocation: "/login_or_register", routes: [
   GoRoute(
     path: "/home_page/:index",
     name: "home_page",
-    builder: (context, state) {
+    pageBuilder: (context, state) {
       final index = int.parse(state.pathParameters['index']!);
-      return MyHomePage(pageIndex: index);
+      return CustomTransitionPage(
+        transitionDuration: Duration(seconds: 1),
+        child: MyHomePage(pageIndex: index),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var tween =
+              Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero);
+          var curveTween = CurveTween(curve: Curves.ease);
+
+          return SlideTransition(
+            position: animation.drive(curveTween).drive(tween),
+            child: child,
+          );
+        },
+      );
     },
   ),
   GoRoute(
     path: "/leaderboard_page",
     name: "leaderboard_page",
-    builder: (context, state) => const MyHomePage(pageIndex: 1),
+    pageBuilder: (context, state) {
+      return CustomTransitionPage(
+          transitionDuration: Duration(seconds: 1),
+          child: const MyHomePage(pageIndex: 1),
+          transitionsBuilder: ((context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity:
+                  CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+              child: child,
+            );
+          }));
+    },
   ),
   GoRoute(
     path: "/difficulty_page",
     name: "difficulty_page",
-    builder: (context, state) => const DifficultyPage(),
+    pageBuilder: (context, state) {
+      return CustomTransitionPage(
+        transitionDuration: Duration(seconds: 1),
+        child: const DifficultyPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var tween =
+              Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero);
+          var curveTween = CurveTween(curve: Curves.ease);
+
+          return SlideTransition(
+            position: animation.drive(curveTween).drive(tween),
+            child: child,
+          );
+        },
+      );
+    },
   ),
   GoRoute(
     path: "/game_page",
     name: "game_page",
-    builder: (context, state) => const GamePage(),
+    pageBuilder: (context, state) {
+      return CustomTransitionPage(
+          transitionDuration: Duration(seconds: 1),
+          child: const GamePage(),
+          transitionsBuilder: ((context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity:
+                  CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+              child: child,
+            );
+          }));
+    },
   )
 ]);
 
